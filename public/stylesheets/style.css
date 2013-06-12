@@ -6,3 +6,101 @@ body {
 a {
   color: #00B7FF;
 }
+
+.notice {
+	position: fixed;
+	opacity: 0;
+	top: -100px;
+	left: 50%;
+	margin-left: -150px;
+	width: 300px;
+	text-align: center;
+	padding: 5px;
+	background: rgba(255, 51, 0, 0.72);
+	color: white;
+	text-shadow: 0 -1px rgba(0, 0, 0, 0.4);
+	font-weight: bold;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+	border-radius: 0 0 8px 8px;
+}
+.notice.show {
+	top: 0;
+	opacity: 1;
+	-webkit-transition: top 350ms linear, opacity 550ms linear;
+	transition: top 350ms linear, opacity 550ms linear;
+}
+
+.token {
+	border: 2px solid rgba(0, 0, 0, .5);
+	border-bottom: 2px solid rgba(0, 0, 0, .7);
+	padding: 6px 13px;
+	border-right: 2px solid rgba(0, 0, 0, .7);
+	background: rgba(0, 0, 0, .03);
+	box-shadow: inset 3px 3px 1px rgba(0, 0, 0, .1);
+	text-shadow: 1px 1px rgba(0, 0, 0, .1);
+	color: rgba(0, 36, 100, 0.7);
+	font-size: 22px;
+	width: 150px;
+	height: 42px;
+	text-align: center;
+	box-sizing: border-box;
+	text-transform: uppercase;
+}
+
+.button {
+	margin-top: 20px;
+	background: rgba(3, 83, 136, .6);
+	background-image: -webkit-radial-gradient(center, transparent, rgba(0, 11, 70, .6));
+	color: white;
+	padding: 10px 15px;
+	width: 150px;
+	box-sizing: border-box;
+	text-align: center;
+	font-weight: bold;
+	border-radius: 2px;
+	border: 1px solid rgba(0, 0, 0, .6);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+}
+
+.title {
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, .3);
+	color: rgba(0, 72, 121, 0.91);
+}
+
+
+.players {
+	list-style: none;
+	padding: 0;
+	margin: 40px 0;
+}
+.players li {
+	opacity: 0;
+	width: 120px;
+	height: 90px;
+	display: inline-block;
+	margin: 15px;
+}
+.players li.active {
+	opacity: 1;
+}
+.players .p1 {
+	background: rgb(255, 41, 0);
+}
+.players .p2 {
+	background: rgb(115, 219, 46);
+}
+.players .p3 {
+	background: rgb(255, 190, 24);
+}
+.players .p4 {
+	background: rgb(16, 187, 253);
+}
+
+.players .nickname {
+	text-align: center;
+	line-height: 90px;
+	color: white;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-family: helvetica;
+}

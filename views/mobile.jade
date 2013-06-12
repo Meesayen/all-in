@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	div.notice Wrong token
+	h1.title= title
+	input.token(type='text', placeholder='token...', maxlength='5')
+	div.button Submit
+
+	script(src='js/mobile.js')
