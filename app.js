@@ -36,13 +36,11 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 
 
-
-// io.sockets.on('connection', function (socket) {
-// 	socket.on('device:connection', function(data) {
-// 		console.log(data.token);
-// 	});
+// Configuration needed by the AppFog PaaS
+// io.configure(function () {
+// 	io.set("transports", ["xhr-polling"]);
+// 	io.set("polling duration", 10);
 // });
-
 
 server.listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
