@@ -69,31 +69,62 @@ a {
 
 
 .players {
-	list-style: none;
 	padding: 0;
 	margin: 40px 0;
+	text-align: center;
 }
-.players li {
-	opacity: 0;
+.players .player {
+	position: relative;
 	width: 120px;
 	height: 90px;
 	display: inline-block;
 	margin: 15px;
+	border: 1px solid rgba(0, 0, 0, .2);
+	border-radius: 2px;
+	box-sizing: border-box;
+
 }
-.players li.active {
-	opacity: 1;
+.players .player.pop {
+	-webkit-animation: player-pop 150ms ease-in 0s;
+	animation: player-pop 150ms ease-in 0s;
 }
-.players .p1 {
-	background: rgb(255, 41, 0);
+.players .player.float {
+	-webkit-transform: translateY(0);
+	-webkit-animation: player-float 650ms linear 0s infinite alternate;
+	animation: player-float 650ms linear 0s infinite alternate;
 }
-.players .p2 {
-	background: rgb(115, 219, 46);
+.players .player.float:after {
+	content: '';
+	position: absolute;
+	width: 180px;
+	bottom: -30px;
+	left: -30px;
+	height: 17px;
+	background: -webkit-radial-gradient(center, rgba(0, 0, 0, 0.3), transparent, transparent);
+	-webkit-transform: scale(1);
+	-webkit-animation: shadow-expand 650ms linear 0s infinite alternate;
+	animation: shadow-expand 650ms linear 0s infinite alternate;
 }
-.players .p3 {
-	background: rgb(255, 190, 24);
+
+.players .player1 {
+	background: #f36f62;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #B15951;
 }
-.players .p4 {
-	background: rgb(16, 187, 253);
+.players .player2 {
+	background: #7ec255;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #508A2C;
+}
+.players .player3 {
+	background: #fbbe63;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #B17D30;
+}
+.players .player4 {
+	background: #40afc3;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #1F7483;
 }
 
 .players .nickname {
@@ -103,4 +134,38 @@ a {
 	font-weight: bold;
 	text-transform: uppercase;
 	font-family: helvetica;
+}
+
+
+@-webkit-keyframes shadow-expand {
+	from {
+		-webkit-transform: scale(1) translateY(0px);
+	}
+	to {
+		-webkit-transform: scale(0.8) translateY(10px);
+	}
+}
+
+@-webkit-keyframes player-pop {
+	0% {
+		-webkit-transform: scale(0.7);
+		opacity: .3;
+	}
+	50% {
+		-webkit-transform: scale(1.2);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes player-float {
+	from {
+		-webkit-transform: translateY(0px);
+	}
+	to {
+		-webkit-transform: translateY(-10px);
+	}
 }
