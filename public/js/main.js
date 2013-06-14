@@ -17,18 +17,18 @@ DesktopClient.prototype = {
 
 	_addCallbacks: function() {
 		// this.btn.addEventListener('click', this._onSubmit.bind(this));
-		setTimeout(function() {
-			this._insertPlayerBalloon({id: 'player1', nickname: 'Player 1'});
-		}.bind(this), 3000);
-		setTimeout(function() {
-			this._insertPlayerBalloon({id: 'player2', nickname: 'Player 2'});
-		}.bind(this), 6000);
-		setTimeout(function() {
-			this._insertPlayerBalloon({id: 'player3', nickname: 'Player 3'});
-		}.bind(this), 9000);
-		setTimeout(function() {
-			this._insertPlayerBalloon({id: 'player4', nickname: 'Player 4'});
-		}.bind(this), 9600);
+		// setTimeout(function() {
+		// 	this._insertPlayerBalloon({id: 'player1', nickname: 'Player 1'});
+		// }.bind(this), 3000);
+		// setTimeout(function() {
+		// 	this._insertPlayerBalloon({id: 'player2', nickname: 'Player 2'});
+		// }.bind(this), 6000);
+		// setTimeout(function() {
+		// 	this._insertPlayerBalloon({id: 'player3', nickname: 'Player 3'});
+		// }.bind(this), 9000);
+		// setTimeout(function() {
+		// 	this._insertPlayerBalloon({id: 'player4', nickname: 'Player 4'});
+		// }.bind(this), 9600);
 	},
 
 	_initComms: function() {
@@ -40,12 +40,8 @@ DesktopClient.prototype = {
 	_handleGameEstablished: function(data) {
 		this.token.innerHTML = data.token;
 	},
-	_handleNewPlayer: function(data) {
-		for (var i = 0, p; p = data.players[i]; i++) {
-			var seat = this.playerSeats[i];
-			seat.querySelector('.nickname').innerHTML = p;
-			seat.classList.add('active');
-		}
+	_handleNewPlayer: function(player) {
+		this._insertPlayerBalloon(player);
 	},
 
 	_insertPlayerBalloon: function(player) {

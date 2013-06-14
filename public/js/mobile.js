@@ -25,7 +25,6 @@ MobileClient.prototype = {
 
 	_onSubmit: function(e) {
 		this.token = this.tokenInput.value.toUpperCase();
-		console.log(this.token);
 		this.socket.emit('device:connection', { token:  this.token });
 	},
 
