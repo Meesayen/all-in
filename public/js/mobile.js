@@ -24,6 +24,7 @@ MobileClient.prototype = {
 	},
 
 	_onSubmit: function(e) {
+		this.btn.classList.add('loading');
 		this.token = this.tokenInput.value.toUpperCase();
 		this.socket.emit('device:connection', { token:  this.token });
 	},
