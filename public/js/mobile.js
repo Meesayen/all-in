@@ -21,6 +21,7 @@ MobileClient.prototype = {
 
 	_initComms: function() {
 		this.socket.on('game:wrongtoken', this._handleWrongToken.bind(this));
+		this.socket.on('game:lobbyfull', this._handleFullLobby.bind(this));
 	},
 
 	_onSubmit: function(e) {
@@ -31,9 +32,19 @@ MobileClient.prototype = {
 
 	_handleWrongToken: function(data) {
 		this.tokenInput.value = '';
+		this.showNotice(data.message);
+	},
+
+	_handleFullLobby: function(data) {
+		this.showNotice(data.message);
+	},
+
+	showNotice: function(message) {
+		this.notice.innerHTML = message;
 		this.notice.classList.add('show');
 		setTimeout(function() {
 			this.notice.classList.remove('show');
+			this.btn.classList.remove('loading');
 		}.bind(this), 4000);
 	}
 };
