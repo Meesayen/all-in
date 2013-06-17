@@ -4,6 +4,9 @@
 var DesktopClient = function(socketUri) {
 	this.socket = io.connect(socketUri);
 	this.token = null;
+
+	this._balloonFloat = this._balloonFloat.bind(this);
+	this._clearBalloon = this._clearBalloon.bind(this);
 };
 
 DesktopClient.prototype = {
@@ -40,10 +43,10 @@ DesktopClient.prototype = {
 	_handleGameEstablished: function(data) {
 		this.token.innerHTML = data.token;
 	},
+
 	_handleNewPlayer: function(player) {
 		this._insertPlayerBalloon(player);
 	},
-
 	_insertPlayerBalloon: function(player) {
 		var box = document.createElement('div');
 		var nickname = document.createElement('div');
@@ -65,17 +68,26 @@ DesktopClient.prototype = {
 		var box = e.srcElement;
 		box.classList.remove('pop');
 		box.classList.add('float');
-	},
-
-	_removePlayerBalloon: function(player) {
-
+		box.removeEventListener('animationEnd', this._balloonFloat);
+		box.removeEventListener('webkitAnimationEnd', this._balloonFloat);
 	},
 
 	_handlePlayerLeft: function(player) {
-		var seat = document.querySelector('.players li #' + player.id);
-		seat.querySelector('.nickname').innerHTML = '';
-		seat.classList.remove('active');
-	}
+		this._removePlayerBalloon(player.id);
+	},
+	_removePlayerBalloon: function(id) {
+		var box = document.querySelector('.player[data-player-id="' + id + '"]');
+		box.addEventListener('animationEnd', this._clearBalloon);
+		box.addEventListener('webkitAnimationEnd', this._clearBalloon);
+		box.classList.remove('float');
+		box.classList.add('puff');
+	},
+	_clearBalloon: function(e) {
+		var box = e.srcElement;
+		box.removeEventListener('animationEnd', this._clearBalloon);
+		box.removeEventListener('webkitAnimationEnd', this._clearBalloon);
+		box.parentNode.removeChild(box);
+	},
 };
 
 

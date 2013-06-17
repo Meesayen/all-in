@@ -105,6 +105,11 @@ a {
 	-webkit-animation: shadow-expand 650ms linear 0s infinite alternate;
 	animation: shadow-expand 650ms linear 0s infinite alternate;
 }
+.players .player.puff {
+	-webkit-transform: translateY(0);
+	-webkit-animation: player-puff 200ms ease-out 0s;
+	animation: player-puff 200ms ease-out 0s;
+}
 
 .players .player1 {
 	background: #f36f62;
@@ -158,6 +163,21 @@ a {
 	100% {
 		-webkit-transform: scale(1);
 		opacity: 1;
+	}
+}
+
+@-webkit-keyframes player-puff {
+	0% {
+		-webkit-transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		-webkit-transform: scale(.4);
+		opacity: .7;
+	}
+	100% {
+		-webkit-transform: scale(2);
+		opacity: 0;
 	}
 }
 
