@@ -11,7 +11,7 @@ var DesktopClient = function(socketUri) {
 
 DesktopClient.prototype = {
 	init: function() {
-		this.btnSubmit = document.querySelector('.button.submit');
+		this.btnReady = document.querySelector('.button.ready');
 
 		this.token = document.querySelector('.token');
 		this.playersBox = document.querySelector('.players');
@@ -21,24 +21,11 @@ DesktopClient.prototype = {
 	},
 
 	_addCallbacks: function() {
-		this.btnSubmit.addEventListener('click', this._onSubmit.bind(this));
-		// this.btn.addEventListener('click', this._onSubmit.bind(this));
-		// setTimeout(function() {
-		// 	this._insertPlayerBalloon({id: 'player1', nickname: 'Player 1'});
-		// }.bind(this), 3000);
-		// setTimeout(function() {
-		// 	this._insertPlayerBalloon({id: 'player2', nickname: 'Player 2'});
-		// }.bind(this), 6000);
-		// setTimeout(function() {
-		// 	this._insertPlayerBalloon({id: 'player3', nickname: 'Player 3'});
-		// }.bind(this), 9000);
-		// setTimeout(function() {
-		// 	this._insertPlayerBalloon({id: 'player4', nickname: 'Player 4'});
-		// }.bind(this), 9600);
+		this.btnReady.addEventListener('click', this._onReady.bind(this));
 	},
 
-	_onSubmit: function(e) {
-		this.btnSubmit.classList.add('loading');
+	_onReady: function(e) {
+		this.btnReady.classList.add('loading');
 		this.socket.emit('game:start');
 	},
 
@@ -105,14 +92,13 @@ DesktopClient.prototype = {
 		box.removeEventListener('webkitAnimationEnd', this._clearBalloon);
 		box.parentNode.removeChild(box);
 	},
-	_handleReadyToPlay: function(data) {
-
-		console.log('Ready to play');
+	_handleReadyToPlay: function() {
+		this.btnReady.classList.remove('disabled');
 	},
-	_handleNotReadyToPlay: function(data) {
-		console.log('Not ready to play');
+	_handleNotReadyToPlay: function() {
+		this.btnReady.classList.add('disabled');
 	},
-	_handleAckStart: function(data) {
+	_handleAckStart: function() {
 		console.log('Game Started');
 	}
 };
