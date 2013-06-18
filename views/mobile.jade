@@ -7,11 +7,12 @@ block content
 		div#token-page.page
 			input.token(type='text', placeholder='token...', maxlength='5')
 			div.button.submit Submit
-		div#waiting-page.page
+		div#info-page.page
 			div.info
-			input.player-info(type='text', maxlength='12', name='nickname')
+			input.player-info(type='text', maxlength='8', name='nickname')
 			div.button.update Update
 			div.button.ready Ready
-
+		div#waiting-page.page
+			span Wait for the game to start...
 
 	script(src='js/mobile.js')

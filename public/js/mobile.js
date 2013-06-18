@@ -15,9 +15,12 @@ MobileClient.prototype = {
 		this.btnReady = document.querySelector('.button.ready');
 
 		this.pageToken = document.querySelector('#token-page');
+		this.pageInfo = document.querySelector('#info-page');
 		this.pageWaiting = document.querySelector('#waiting-page');
 
 		this.tokenInput = document.querySelector('.token');
+		this.nicknameInput = document.querySelector('.player-info[name="nickname"]');
+
 		this.notice = document.querySelector('.notice');
 		this._initComms();
 		this._addCallbacks();
@@ -33,6 +36,7 @@ MobileClient.prototype = {
 		this.socket.on('game:connected', this._handleConnection.bind(this));
 		this.socket.on('game:wrongtoken', this._handleWrongToken.bind(this));
 		this.socket.on('game:lobbyfull', this._handleFullLobby.bind(this));
+		this.socket.on('player:ack-ready', this._handleAckReady.bind(this));
 	},
 
 	_onSubmit: function(e) {
@@ -42,8 +46,8 @@ MobileClient.prototype = {
 	},
 	_onUpdate: function(e) {
 		// TODO gravatar
-		var nickname = document.querySelector('.player-info[name="nickname"]');
-		this.socket.emit('player:info-update', { nickname:  nickname.value });
+		var nickname = this.nicknameInput.value;
+		this.socket.emit('player:info-update', { nickname:  nickname });
 	},
 	_onReady: function(e) {
 		// TODO update & ready buttons disappear, and a loading is put in place
@@ -53,10 +57,9 @@ MobileClient.prototype = {
 	_handleConnection: function(data) {
 		this.nickname = data.nickname;
 		this.balance = data.balance;
-		var nickname = document.querySelector('.player-info[name="nickname"]');
-		nickname.value = this.nickname;
+		this.nicknameInput.value = this.nickname;
 		this.pageToken.classList.add('exit');
-		this.pageWaiting.classList.add('enter');
+		this.pageInfo.classList.add('enter');
 	},
 
 	_handleWrongToken: function(data) {
@@ -66,6 +69,14 @@ MobileClient.prototype = {
 
 	_handleFullLobby: function(data) {
 		this.showNotice(data.message);
+	},
+	_handleAckReady: function(data) {
+		this.btnReady.classList.add('disabled');
+		this.btnUpdate.classList.add('disabled');
+		this.nicknameInput.disabled = 'disabled';
+		this.pageWaiting.classList.add('enter');
+		this.pageInfo.classList.add('exit');
+		this.pageInfo.classList.remove('enter');
 	},
 
 	showNotice: function(message) {

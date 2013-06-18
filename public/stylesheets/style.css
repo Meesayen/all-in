@@ -235,8 +235,11 @@ input[type="text"],
 #token-page {
 	z-index: 11;
 }
-#waiting-page {
+#info-page {
 	z-index: 10;
+}
+#waiting-page {
+	z-index: 9;
 }
 
 
@@ -258,3 +261,8 @@ input[type="text"],
 	}
 }
 
+
+.disabled {
+	opacity: .6;
+	pointer-events: none;
+}
