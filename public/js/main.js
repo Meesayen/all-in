@@ -38,10 +38,17 @@ DesktopClient.prototype = {
 		this.socket.on('game:tokenized', this._handleGameEstablished.bind(this));
 		this.socket.on('game:newplayer', this._handleNewPlayer.bind(this));
 		this.socket.on('game:playerleft', this._handlePlayerLeft.bind(this));
+		this.socket.on('player:info-update', this._handlePlayerInfoUpdate.bind(this));
 	},
 
 	_handleGameEstablished: function(data) {
 		this.token.innerHTML = data.token;
+	},
+
+	_handlePlayerInfoUpdate: function(player) {
+		var box = document.querySelector('.player[data-player-id="' + player.id + '"]');
+		var nickname = box.querySelector('.nickname');
+		nickname.innerHTML = player.nickname;
 	},
 
 	_handleNewPlayer: function(player) {
@@ -89,9 +96,6 @@ DesktopClient.prototype = {
 		box.parentNode.removeChild(box);
 	},
 };
-
-
-
 
 
 

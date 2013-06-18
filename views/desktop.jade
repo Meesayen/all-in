@@ -1,8 +1,10 @@
 extends layout
 
 block content
-	h1= title
-	div.token(type='text', placeholder='token...')
+	h1.game-title= title
+	div.page-box
+		div.page
+			div.token
 	div.players
 
 	script(src='js/main.js')

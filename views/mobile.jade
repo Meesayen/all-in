@@ -1,9 +1,17 @@
 extends layout
 
 block content
-	div.notice Wrong token
-	h1.title= title
-	input.token(type='text', placeholder='token...', maxlength='5')
-	div.button Submit
+	div.notice
+	h1.game-title= title
+	div.page-box
+		div#token-page.page
+			input.token(type='text', placeholder='token...', maxlength='5')
+			div.button.submit Submit
+		div#waiting-page.page
+			div.info
+			input.player-info(type='text', maxlength='12', name='nickname')
+			div.button.update Update
+			div.button.ready Ready
+
 
 	script(src='js/mobile.js')
