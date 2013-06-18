@@ -37,6 +37,7 @@ MobileClient.prototype = {
 		this.socket.on('game:wrongtoken', this._handleWrongToken.bind(this));
 		this.socket.on('game:lobbyfull', this._handleFullLobby.bind(this));
 		this.socket.on('player:ack-ready', this._handleAckReady.bind(this));
+		this.socket.on('game:ack-start', this._handleAckStart.bind(this));
 	},
 
 	_onSubmit: function(e) {
@@ -70,6 +71,7 @@ MobileClient.prototype = {
 	_handleFullLobby: function(data) {
 		this.showNotice(data.message);
 	},
+
 	_handleAckReady: function(data) {
 		this.btnReady.classList.add('disabled');
 		this.btnUpdate.classList.add('disabled');
@@ -77,6 +79,10 @@ MobileClient.prototype = {
 		this.pageWaiting.classList.add('enter');
 		this.pageInfo.classList.add('exit');
 		this.pageInfo.classList.remove('enter');
+	},
+
+	_handleAckStart: function(data) {
+		console.log('Game Started');
 	},
 
 	showNotice: function(message) {

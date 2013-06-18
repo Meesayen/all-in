@@ -11,6 +11,8 @@ var DesktopClient = function(socketUri) {
 
 DesktopClient.prototype = {
 	init: function() {
+		this.btnSubmit = document.querySelector('.button.submit');
+
 		this.token = document.querySelector('.token');
 		this.playersBox = document.querySelector('.players');
 		this._initComms();
@@ -19,6 +21,7 @@ DesktopClient.prototype = {
 	},
 
 	_addCallbacks: function() {
+		this.btnSubmit.addEventListener('click', this._onSubmit.bind(this));
 		// this.btn.addEventListener('click', this._onSubmit.bind(this));
 		// setTimeout(function() {
 		// 	this._insertPlayerBalloon({id: 'player1', nickname: 'Player 1'});
@@ -34,11 +37,19 @@ DesktopClient.prototype = {
 		// }.bind(this), 9600);
 	},
 
+	_onSubmit: function(e) {
+		this.btnSubmit.classList.add('loading');
+		this.socket.emit('game:start');
+	},
+
 	_initComms: function() {
 		this.socket.on('game:tokenized', this._handleGameEstablished.bind(this));
 		this.socket.on('game:newplayer', this._handleNewPlayer.bind(this));
 		this.socket.on('game:playerleft', this._handlePlayerLeft.bind(this));
 		this.socket.on('player:info-update', this._handlePlayerInfoUpdate.bind(this));
+		this.socket.on('game:ready-to-play', this._handleReadyToPlay.bind(this));
+		this.socket.on('game:not-ready-to-play', this._handleNotReadyToPlay.bind(this));
+		this.socket.on('game:ack-start', this._handleAckStart.bind(this));
 	},
 
 	_handleGameEstablished: function(data) {
@@ -78,7 +89,6 @@ DesktopClient.prototype = {
 		box.removeEventListener('animationEnd', this._balloonFloat);
 		box.removeEventListener('webkitAnimationEnd', this._balloonFloat);
 	},
-
 	_handlePlayerLeft: function(player) {
 		this._removePlayerBalloon(player.id);
 	},
@@ -95,6 +105,16 @@ DesktopClient.prototype = {
 		box.removeEventListener('webkitAnimationEnd', this._clearBalloon);
 		box.parentNode.removeChild(box);
 	},
+	_handleReadyToPlay: function(data) {
+
+		console.log('Ready to play');
+	},
+	_handleNotReadyToPlay: function(data) {
+		console.log('Not ready to play');
+	},
+	_handleAckStart: function(data) {
+		console.log('Game Started');
+	}
 };
 
 
