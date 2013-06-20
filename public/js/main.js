@@ -11,32 +11,49 @@ var DesktopClient = function(socketUri) {
 
 DesktopClient.prototype = {
 	init: function() {
-		this.btnReady = document.querySelector('.button.ready');
+		this.btnNext = document.querySelector('.button.next');
+		this.page = document.querySelector('.page');
 
-		this.token = document.querySelector('.token');
+		this.token = document.querySelector('.token-box');
 		this.playersBox = document.querySelector('.players');
 		this._initComms();
 		this._addCallbacks();
-		this.socket.emit('desktop:connection');
 	},
 
 	_addCallbacks: function() {
-		this.btnReady.addEventListener('click', this._onReady.bind(this));
+		this.btnNext.addEventListener('click', this._onNext.bind(this));
 	},
 
-	_onReady: function(e) {
-		this.btnReady.classList.add('loading');
-		this.socket.emit('game:start');
+	_onNext: function(e) {
+		var phase = this.page.dataset.phase;
+		if (phase === 'landing') {
+			this._showInstructions();
+		} else if (phase === 'instructions') {
+			this._showToken();
+		} else {
+			this.btnNext.classList.add('loading');
+			this.socket.emit('game:start');
+		}
 	},
 
 	_initComms: function() {
 		this.socket.on('game:tokenized', this._handleGameEstablished.bind(this));
-		this.socket.on('game:newplayer', this._handleNewPlayer.bind(this));
-		this.socket.on('game:playerleft', this._handlePlayerLeft.bind(this));
+		this.socket.on('game:player-joined', this._handlePlayerJoined.bind(this));
+		this.socket.on('game:player-left', this._handlePlayerLeft.bind(this));
 		this.socket.on('player:info-update', this._handlePlayerInfoUpdate.bind(this));
 		this.socket.on('game:ready-to-play', this._handleReadyToPlay.bind(this));
 		this.socket.on('game:not-ready-to-play', this._handleNotReadyToPlay.bind(this));
 		this.socket.on('game:ack-start', this._handleAckStart.bind(this));
+	},
+
+	_showInstructions: function() {
+		this.page.dataset.phase = 'instructions';
+	},
+	_showToken: function() {
+		this.page.dataset.phase = 'token';
+		this.btnNext.innerHTML = 'START';
+		this.btnNext.classList.add('disabled');
+		this.socket.emit('desktop:connection');
 	},
 
 	_handleGameEstablished: function(data) {
@@ -49,7 +66,7 @@ DesktopClient.prototype = {
 		nickname.innerHTML = player.nickname;
 	},
 
-	_handleNewPlayer: function(player) {
+	_handlePlayerJoined: function(player) {
 		this._insertPlayerBalloon(player);
 	},
 	_insertPlayerBalloon: function(player) {
@@ -93,10 +110,10 @@ DesktopClient.prototype = {
 		box.parentNode.removeChild(box);
 	},
 	_handleReadyToPlay: function() {
-		this.btnReady.classList.remove('disabled');
+		this.btnNext.classList.remove('disabled');
 	},
 	_handleNotReadyToPlay: function() {
-		this.btnReady.classList.add('disabled');
+		this.btnNext.classList.add('disabled');
 	},
 	_handleAckStart: function() {
 		console.log('Game Started');

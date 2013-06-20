@@ -3,7 +3,9 @@ html
 	head
 		title= title
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-		link(rel='stylesheet', href='/stylesheets/style.css')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js')
+
+		block head
+
 	body
 		block content

@@ -1,11 +1,25 @@
 extends layout
 
+block head
+	link(rel='stylesheet', href='/stylesheets/desktop.css')
+
 block content
-	h1.game-title= title
 	div.page-box
-		div.page
-			div.token
-			div.button.ready.disabled Start Game
+		div.game-title
+		div.page(data-phase='landing')
+			div.info Sync your phone to your computer to start playing.
+			div.phone-img
+				div.viewport
+					div.url-bar http://|
+					div.phone-page
+						div.title
+						div.input
+							div.cursor
+			div.arrow
+			div.url-box all-in.aws.af.cm
+			div.token-box
+			div.button.next NEXT
+
 	div.players
 	div.footer
 
