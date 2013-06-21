@@ -5,17 +5,13 @@ block head
 
 block content
 	div.notice
-	h1.game-title= title
-	div.page-box
-		div#token-page.page
-			input.token(type='text', placeholder='token...', maxlength='5')
-			div.button.submit Submit
-		div#info-page.page
-			div.info
-			input.player-info(type='text', maxlength='8', name='nickname')
-			div.button.update Update
-			div.button.ready Ready
-		div#waiting-page.page
-			span Wait for the game to start...
+	div.page(data-phase='token-request')
+		div.game-title
+		input.token(type='text', placeholder='token...', maxlength='5')
+		div.label Nickname
+		input.player-info(type='text', maxlength='8', name='nickname')
+		div.button.next SEND
+
+		span.waiting-msg Wait for the game to start...
 
 	script(src='js/mobile.js')

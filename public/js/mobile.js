@@ -10,13 +10,9 @@ var MobileClient = function(socketUri) {
 
 MobileClient.prototype = {
 	init: function() {
-		this.btnSubmit = document.querySelector('.button.submit');
-		this.btnUpdate = document.querySelector('.button.update');
-		this.btnReady = document.querySelector('.button.ready');
-
-		this.pageToken = document.querySelector('#token-page');
-		this.pageInfo = document.querySelector('#info-page');
-		this.pageWaiting = document.querySelector('#waiting-page');
+		this.page = document.querySelector('.page');
+		this.page.style.height = window.screen.height + 'px';
+		this.btnNext = document.querySelector('.button.next');
 
 		this.tokenInput = document.querySelector('.token');
 		this.nicknameInput = document.querySelector('.player-info[name="nickname"]');
@@ -27,9 +23,8 @@ MobileClient.prototype = {
 	},
 
 	_addCallbacks: function() {
-		this.btnSubmit.addEventListener('click', this._onSubmit.bind(this));
-		this.btnUpdate.addEventListener('click', this._onUpdate.bind(this));
-		this.btnReady.addEventListener('click', this._onReady.bind(this));
+		this.btnNext.addEventListener('click', this._onNext.bind(this));
+		this.nicknameInput.addEventListener('keyup', this._onUpdate.bind(this));
 	},
 
 	_initComms: function() {
@@ -40,11 +35,27 @@ MobileClient.prototype = {
 		this.socket.on('game:ack-start', this._handleAckStart.bind(this));
 	},
 
-	_onSubmit: function(e) {
-		this.btnSubmit.classList.add('loading');
+	_onNext: function(e) {
+		var phase = this.page.dataset.phase;
+		if (phase === 'token-request') {
+			this._sendToken();
+		} else if (phase === 'info-update') {
+			this._sendReady();
+		} else {
+			this.socket.emit('player:ready');
+		}
+	},
+
+	_sendToken: function() {
+		this.btnNext.classList.add('loading');
 		this.token = this.tokenInput.value.toUpperCase();
 		this.socket.emit('device:connection', { token:  this.token });
 	},
+
+	_sendReady: function() {
+		this.socket.emit('player:ready');
+	},
+
 	_onUpdate: function(e) {
 		// TODO gravatar
 		var nickname = this.nicknameInput.value;
@@ -55,12 +66,15 @@ MobileClient.prototype = {
 		this.socket.emit('player:ready');
 	},
 
-	_handleConnection: function(data) {
-		this.nickname = data.nickname;
-		this.balance = data.balance;
+	_handleConnection: function(player) {
+		this.nickname = player.nickname;
+		this.balance = player.balance;
 		this.nicknameInput.value = this.nickname;
-		this.pageToken.classList.add('exit');
-		this.pageInfo.classList.add('enter');
+		this.page.dataset.playerId = player.id;
+		this.btnNext.classList.remove('loading');
+
+		this.page.dataset.phase = 'info-update';
+		this.btnNext.innerHTML = 'READY';
 	},
 
 	_handleWrongToken: function(data) {
@@ -73,12 +87,7 @@ MobileClient.prototype = {
 	},
 
 	_handleAckReady: function(data) {
-		this.btnReady.classList.add('disabled');
-		this.btnUpdate.classList.add('disabled');
-		this.nicknameInput.disabled = 'disabled';
-		this.pageWaiting.classList.add('enter');
-		this.pageInfo.classList.add('exit');
-		this.pageInfo.classList.remove('enter');
+		this.page.dataset.phase = 'waiting';
 	},
 
 	_handleAckStart: function(data) {

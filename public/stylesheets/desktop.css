@@ -1,33 +1,15 @@
 @import url(http://fonts.googleapis.com/css?family=Arvo:700|PT+Sans:400,700);
 
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: #f8f5f2;
-  background-image: url(../images/desktop/noise.png);
+	padding: 50px;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 14px;
+	background: #f8f5f2;
+	background-image: url(../images/desktop/noise.png);
 }
 
 a {
-  color: #00B7FF;
-}
-
-input[type="text"],
-.token  {
-	display: inline-block;
-	border: 2px solid rgba(0, 0, 0, .5);
-	border-bottom: 2px solid rgba(0, 0, 0, .7);
-	padding: 6px 13px;
-	border-right: 2px solid rgba(0, 0, 0, .7);
-	background: rgba(0, 0, 0, .03);
-	box-shadow: inset 3px 3px 1px rgba(0, 0, 0, .1);
-	text-shadow: 1px 1px rgba(0, 0, 0, .1);
-	color: rgba(0, 36, 100, 0.7);
-	font-size: 22px;
-	width: 150px;
-	height: 42px;
-	text-align: center;
-	box-sizing: border-box;
-	text-transform: uppercase;
+	color: #00B7FF;
 }
 
 .button {
@@ -213,7 +195,6 @@ input[type="text"],
 }
 
 .page .info {
-	font-family: 'PT Sans', sans-serif;
 	font-size: 15px;
 	color: white;
 	text-shadow: 0 -1px rgba(0, 0, 0, 0.4);
@@ -248,7 +229,6 @@ input[type="text"],
 }
 .phone-img .url-bar {
 	position: absolute;
-	font-family: 'PT Sans', sans-serif;
 	background: rgba(134, 223, 0, 0.83);
 	width: 100%;
 	height: 15px;
@@ -282,7 +262,6 @@ input[type="text"],
 	left: 50%;
 	background: #7ec255;
 	color: transparent;
-	font-family: 'PT Sans', sans-serif;
 	font-size: 25px;
 	font-weight: bold;
 	width: 44px;
@@ -311,7 +290,7 @@ input[type="text"],
 .arrow {
 	position: absolute;
 	top: 77px;
-	left: 122px;
+	left: 200px;
 	width: 36px;
 	background: url(../images/desktop/arrow.png);
 	height: 26px;
@@ -323,7 +302,6 @@ input[type="text"],
 	left: 50%;
 	background: #7ec255;
 	color: white;
-	font-family: 'PT Sans', sans-serif;
 	font-size: 18px;
 	width: 150px;
 	height: 43px;
@@ -340,7 +318,6 @@ input[type="text"],
 	left: 50%;
 	background: #7ec255;
 	color: transparent;
-	font-family: 'PT Sans', sans-serif;
 	font-size: 25px;
 	font-weight: bold;
 	width: 150px;
@@ -368,9 +345,12 @@ input[type="text"],
 }
 .page[data-phase="instructions"] .arrow {
 	opacity: 1;
-	transition: opacity 150ms linear 550ms;
-	-webkit-animation: arrow-shift 200ms ease-out 350ms alternate infinite;
-	animation: arrow-shift 200ms ease-out 350ms alternate infinite;
+	left: 122px;
+	transition:
+		left 250ms ease-out 550ms,
+		opacity 100ms linear 550ms;
+	-webkit-animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
+	animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
 }
 .page[data-phase="instructions"] .url-box {
 	-webkit-animation: fade-in 200ms ease-out 350ms forwards;
@@ -395,9 +375,10 @@ input[type="text"],
 	animation: fade-in 600ms linear 0ms alternate infinite;
 }
 .page[data-phase="token"] .arrow {
+	left: 122px;
 	opacity: 1;
-	-webkit-animation: arrow-shift 200ms ease-out 350ms alternate infinite;
-	animation: arrow-shift 200ms ease-out 350ms alternate infinite;
+	-webkit-animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
+	animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
 }
 .page[data-phase="token"] .url-box {
 	opacity: 0;
@@ -452,10 +433,10 @@ input[type="text"],
 }
 @-webkit-keyframes arrow-shift {
 	from {
-		-webkit-transform: translateX(3px);
+		-webkit-transform: translateX(2px);
 	}
 	to {
-		-webkit-transform: translateX(-3px);
+		-webkit-transform: translateX(-2px);
 	}
 }
 @-webkit-keyframes token-box-fade-in {

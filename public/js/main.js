@@ -63,7 +63,7 @@ DesktopClient.prototype = {
 	_handlePlayerInfoUpdate: function(player) {
 		var box = document.querySelector('.player[data-player-id="' + player.id + '"]');
 		var nickname = box.querySelector('.nickname');
-		nickname.innerHTML = player.nickname;
+		nickname.innerHTML = player.nickname !== '' ? player.nickname : '&nbsp;';
 	},
 
 	_handlePlayerJoined: function(player) {
