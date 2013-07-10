@@ -14,8 +14,17 @@ MobileClient.prototype = {
 		this.page.style.height = window.screen.height + 'px';
 		this.btnNext = document.querySelector('.button.next');
 
+		this.lobby = document.querySelector('#lobby');
+		this.gameTable = document.querySelector('#game-table');
+
 		this.tokenInput = document.querySelector('.token');
 		this.nicknameInput = document.querySelector('.player-info[name="nickname"]');
+
+		this.cards = [].slice.apply(document.querySelectorAll('.card'));
+		this.callBtn = document.querySelector('.call');
+		this.raiseBtn = document.querySelector('.raise');
+		this.foldBtn = document.querySelector('.fold');
+
 
 		this.notice = document.querySelector('.notice');
 		this._initComms();
@@ -25,6 +34,9 @@ MobileClient.prototype = {
 	_addCallbacks: function() {
 		this.btnNext.addEventListener('click', this._onNext.bind(this));
 		this.nicknameInput.addEventListener('keyup', this._onUpdate.bind(this));
+		this.callBtn.addEventListener('click', this._onCall.bind(this));
+		this.raiseBtn.addEventListener('click', this._onRaise.bind(this));
+		this.foldBtn.addEventListener('click', this._onFold.bind(this));
 	},
 
 	_initComms: function() {
@@ -32,7 +44,12 @@ MobileClient.prototype = {
 		this.socket.on('game:wrongtoken', this._handleWrongToken.bind(this));
 		this.socket.on('game:lobbyfull', this._handleFullLobby.bind(this));
 		this.socket.on('player:ack-ready', this._handleAckReady.bind(this));
-		this.socket.on('game:ack-start', this._handleAckStart.bind(this));
+		this.socket.on('game:start', this._handleGameStart.bind(this));
+
+		this.socket.on('player:new-card', this._handleNewCard.bind(this));
+		this.socket.on('player:wait-to-bet', this._handleWaitToBet.bind(this));
+		this.socket.on('player:ack-bet', this._handleWaitToBet.bind(this));
+		this.socket.on('player:my-turn', this._handleMyTurn.bind(this));
 	},
 
 	_onNext: function(e) {
@@ -61,10 +78,19 @@ MobileClient.prototype = {
 		var nickname = this.nicknameInput.value;
 		this.socket.emit('player:info-update', { nickname:  nickname });
 	},
-	_onReady: function(e) {
-		// TODO update & ready buttons disappear, and a loading is put in place
-		this.socket.emit('player:ready');
+
+	_onCall: function(e) {
+		this.socket.emit('player:call');
 	},
+	_onRaise: function(e) {
+		this.socket.emit('player:raise', {
+			amount: 100
+		});
+	},
+	_onFold: function(e) {
+		this.socket.emit('player:fold');
+	},
+
 
 	_handleConnection: function(player) {
 		this.nickname = player.nickname;
@@ -90,8 +116,26 @@ MobileClient.prototype = {
 		this.page.dataset.phase = 'waiting';
 	},
 
-	_handleAckStart: function(data) {
+	_handleGameStart: function(data) {
 		console.log('Game Started');
+		this.lobby.style.display = 'none';
+		this.gameTable.style.display = 'block';
+	},
+	_handleNewCard: function(card) {
+		console.log(card);
+		var cardEl = this.cards.shift();
+		cardEl.dataset.seed = card.seed;
+		cardEl.querySelector('.value').innerHTML = card.value;
+	},
+	_handleWaitToBet: function() {
+		this.callBtn.classList.add('disabled')
+		this.raiseBtn.classList.add('disabled')
+		this.foldBtn.classList.add('disabled')
+	},
+	_handleMyTurn: function() {
+		this.callBtn.classList.remove('disabled')
+		this.raiseBtn.classList.remove('disabled')
+		this.foldBtn.classList.remove('disabled')
 	},
 
 	showNotice: function(message) {

@@ -32,7 +32,7 @@ DesktopClient.prototype = {
 			this._showToken();
 		} else {
 			this.btnNext.classList.add('loading');
-			this.socket.emit('game:start');
+			this.socket.emit('web:start');
 		}
 	},
 
@@ -43,7 +43,9 @@ DesktopClient.prototype = {
 		this.socket.on('player:info-update', this._handlePlayerInfoUpdate.bind(this));
 		this.socket.on('game:ready-to-play', this._handleReadyToPlay.bind(this));
 		this.socket.on('game:not-ready-to-play', this._handleNotReadyToPlay.bind(this));
-		this.socket.on('game:ack-start', this._handleAckStart.bind(this));
+		this.socket.on('game:start', this._handleGameStart.bind(this));
+
+		this.socket.on('game:draw-flop', this._handleDrawFlop.bind(this));
 	},
 
 	_showInstructions: function() {
@@ -53,7 +55,7 @@ DesktopClient.prototype = {
 		this.page.dataset.phase = 'token';
 		this.btnNext.innerHTML = 'START';
 		this.btnNext.classList.add('disabled');
-		this.socket.emit('desktop:connection');
+		this.socket.emit('web:connection');
 	},
 
 	_handleGameEstablished: function(data) {
@@ -115,8 +117,12 @@ DesktopClient.prototype = {
 	_handleNotReadyToPlay: function() {
 		this.btnNext.classList.add('disabled');
 	},
-	_handleAckStart: function() {
+	_handleGameStart: function() {
 		console.log('Game Started');
+	},
+
+	_handleDrawFlop: function(card) {
+		console.log(card);
 	}
 };
 

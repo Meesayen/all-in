@@ -4,23 +4,34 @@ block head
 	link(rel='stylesheet', href='/stylesheets/desktop.css')
 
 block content
-	div.page-box
-		div.game-title
-		div.page(data-phase='landing')
-			div.info Sync your phone to your computer to start playing.
-			div.phone-img
-				div.viewport
-					div.url-bar http://|
-					div.phone-page
-						div.title
-						div.input
-							div.cursor
-			div.arrow
-			div.url-box all-in.aws.af.cm
-			div.token-box
-			div.button.next NEXT
+	div#lobby
+		div.page-box
+			div.game-title
+			div.page(data-phase='landing')
+				div.info Sync your phone to your computer to start playing.
+				div.phone-img
+					div.viewport
+						div.url-bar http://|
+						div.phone-page
+							div.title
+							div.input
+								div.cursor
+				div.arrow
+				div.url-box all-in.aws.af.cm
+				div.token-box
+				div.button.next NEXT
 
-	div.players
+		div.players
+
+	div#game-table
+		div.card-box
+			div#flop-1.card
+			div#flop-2.card
+			div#flop-3.card
+			div#turn.card
+			div#river.card
+		div.players
+
 	div.footer
 
-	script(src='js/main.js')
+	script(src='js/desktop/main.js')

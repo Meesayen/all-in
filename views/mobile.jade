@@ -4,14 +4,27 @@ block head
 	link(rel='stylesheet', href='/stylesheets/mobile.css')
 
 block content
-	div.notice
-	div.page(data-phase='token-request')
-		div.game-title
-		input.token(type='text', placeholder='token...', maxlength='5')
-		div.label Nickname
-		input.player-info(type='text', maxlength='8', name='nickname')
-		div.button.next SEND
+	div#lobby
+		div.notice
+		div.page(data-phase='token-request')
+			div.game-title
+			input.token(type='text', placeholder='token...', maxlength='5')
+			div.label Nickname
+			input.player-info(type='text', maxlength='8', name='nickname')
+			div.button.next SEND
 
-		span.waiting-msg Wait for the game to start...
+			span.waiting-msg Wait for the game to start...
 
-	script(src='js/mobile.js')
+	div#game-table
+		div.cards
+			div#card-1.card
+				div.value
+			div#card-2.card
+				div.value
+		div.buttons
+			div.game-button.call CALL
+			div.game-button.raise RAISE
+			div.game-button.fold FOLD
+		div.raise-slider
+
+	script(src='js/mobile/main.js')
