@@ -14,8 +14,14 @@ DesktopClient.prototype = {
 		this.btnNext = document.querySelector('.button.next');
 		this.page = document.querySelector('.page');
 
+		this.lobby = document.querySelector('#lobby');
+		this.gameTable = document.querySelector('#game-table');
+
 		this.token = document.querySelector('.token-box');
-		this.playersBox = document.querySelector('.players');
+		this.playersBox = document.querySelector('#lobby .players');
+		this.tablePlayersBox = document.querySelector('#game-table .players');
+		this.tablePlayerTmpl = document.querySelector('template.player-tmpl');
+
 		this._initComms();
 		this._addCallbacks();
 	},
@@ -46,6 +52,9 @@ DesktopClient.prototype = {
 		this.socket.on('game:start', this._handleGameStart.bind(this));
 
 		this.socket.on('game:draw-flop', this._handleDrawFlop.bind(this));
+
+		this.socket.on('player:update', this._handlePlayerUpdate.bind(this));
+		this.socket.on('player:call', this._handlePlayerCall.bind(this));
 	},
 
 	_showInstructions: function() {
@@ -117,12 +126,39 @@ DesktopClient.prototype = {
 	_handleNotReadyToPlay: function() {
 		this.btnNext.classList.add('disabled');
 	},
-	_handleGameStart: function() {
+	_handleGameStart: function(data) {
 		console.log('Game Started');
+
+		for (var i = 0, p; p = data.players[i]; i++) {
+			var player = this.tablePlayerTmpl.content.cloneNode(true);
+			player.querySelector('.nickname').innerHTML = p.nickname;
+			player.querySelector('.balance').innerHTML = p.balance;
+			player.querySelector('.player').classList.add(p.id);
+			player.querySelector('.player').dataset.status = p.status;
+			this.tablePlayersBox.appendChild(player);
+		}
+
+		this.lobby.style.display = 'none';
+		this.gameTable.style.display = 'block';
 	},
 
 	_handleDrawFlop: function(card) {
 		console.log(card);
+	},
+
+	/* Player Round Actions */
+
+	_handlePlayerUpdate: function(player) {
+		console.log('player update', player);
+		var p = this.tablePlayersBox.querySelector('#game-table .' + player.id);
+
+		if (!p) return;
+
+		p.dataset.status = player.status;
+		p.querySelector('.balance').innerHTML = player.balance;
+	},
+	_handlePlayerCall: function(player) {
+		console.log(player);
 	}
 };
 

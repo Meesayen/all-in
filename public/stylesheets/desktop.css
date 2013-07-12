@@ -49,12 +49,12 @@ a {
 }
 
 
-.players {
+#lobby .players {
 	padding: 0;
 	margin: 40px 0;
 	text-align: center;
 }
-.players .player {
+#lobby .players .player {
 	position: relative;
 	width: 120px;
 	height: 90px;
@@ -65,16 +65,16 @@ a {
 	box-sizing: border-box;
 
 }
-.players .player.pop {
+#lobby .players .player.pop {
 	-webkit-animation: player-pop 150ms ease-in 0s;
 	animation: player-pop 150ms ease-in 0s;
 }
-.players .player.float {
+#lobby .players .player.float {
 	-webkit-transform: translateY(0);
 	-webkit-animation: player-float 650ms linear 0s infinite alternate;
 	animation: player-float 650ms linear 0s infinite alternate;
 }
-.players .player.float:after {
+#lobby .players .player.float:after {
 	content: '';
 	position: absolute;
 	width: 180px;
@@ -86,34 +86,34 @@ a {
 	-webkit-animation: shadow-expand 650ms linear 0s infinite alternate;
 	animation: shadow-expand 650ms linear 0s infinite alternate;
 }
-.players .player.puff {
+#lobby .players .player.puff {
 	-webkit-transform: translateY(0);
 	-webkit-animation: player-puff 200ms ease-out 0s;
 	animation: player-puff 200ms ease-out 0s;
 }
 
-.players .player1 {
+#lobby .players .player1 {
 	background: #f36f62;
 	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
 		1px 2px #B15951;
 }
-.players .player2 {
+#lobby .players .player2 {
 	background: #fbbe63;
 	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
 		1px 2px #B17D30;
 }
-.players .player3 {
+#lobby .players .player3 {
 	background: #7ec255;
 	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
 		1px 2px #508A2C;
 }
-.players .player4 {
+#lobby .players .player4 {
 	background: #40afc3;
 	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
 		1px 2px #1F7483;
 }
 
-.players .nickname {
+#lobby .players .nickname {
 	text-align: center;
 	line-height: 90px;
 	color: white;
@@ -483,4 +483,125 @@ a {
 	background-repeat: no-repeat;
 	background-size: 100% 8px;
 	background-color: #f2faf6;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#game-table .players {
+	padding: 0;
+	text-align: center;
+	bottom: 112px;
+	position: absolute;
+	width: 100%;
+	height: 130px;
+	margin: 0;
+	left: 0;
+}
+#game-table .players .player {
+	position: relative;
+	width: 120px;
+	height: 90px;
+	display: inline-block;
+	margin: 15px;
+	border: 1px solid rgba(0, 0, 0, .2);
+	border-radius: 2px;
+	box-sizing: border-box;
+
+}
+#game-table .players .player.pop {
+	-webkit-animation: player-pop 150ms ease-in 0s;
+	animation: player-pop 150ms ease-in 0s;
+}
+#game-table .players .player.float {
+	-webkit-transform: translateY(0);
+	-webkit-animation: player-float 650ms linear 0s infinite alternate;
+	animation: player-float 650ms linear 0s infinite alternate;
+}
+#game-table .players .player.float:after {
+	content: '';
+	position: absolute;
+	width: 180px;
+	bottom: -30px;
+	left: -30px;
+	height: 17px;
+	background: -webkit-radial-gradient(center, rgba(0, 0, 0, 0.3), transparent, transparent);
+	-webkit-transform: scale(1);
+	-webkit-animation: shadow-expand 650ms linear 0s infinite alternate;
+	animation: shadow-expand 650ms linear 0s infinite alternate;
+}
+#game-table .players .player.puff {
+	-webkit-transform: translateY(0);
+	-webkit-animation: player-puff 200ms ease-out 0s;
+	animation: player-puff 200ms ease-out 0s;
+}
+
+#game-table .players .player1 {
+	background: #f36f62;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #B15951;
+}
+#game-table .players .player2 {
+	background: #fbbe63;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #B17D30;
+}
+#game-table .players .player3 {
+	background: #7ec255;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #508A2C;
+}
+#game-table .players .player4 {
+	background: #40afc3;
+	box-shadow: inset 0 0 2px 5px rgba(255, 255, 255, 0.2),
+		1px 2px #1F7483;
+}
+
+#game-table .players .nickname {
+	text-align: center;
+	line-height: 90px;
+	color: white;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-family: helvetica;
+}
+
+
+#game-table .player[data-status="waits"] {
+	opacity: 0.6;
+	-webkit-filter: brightness(0.8);
+}
+#game-table .player[data-status="betting"] {
+	opacity: 1;
+}
+#game-table .player:before {
+	position: absolute;
+	content: '';
+	width: 100%;
+	height: 28px;
+	top: -18px;
+	left: 0;
+	font-size: 20px;
+	text-align: left;
+	padding: 0 8px;
+	font-weight: bold;
+	text-shadow:
+		2px 2px white,
+		-2px -2px white,
+		-2px 2px white,
+		2px -2px white,
+		0 4px 7px rgba(0, 0, 0, 0.7);
+	letter-spacing: 2px;
+}
+#game-table .player[data-status="calls"]:before {
+	content: 'CALLS';
+	color: rgb(79, 179, 218);
 }

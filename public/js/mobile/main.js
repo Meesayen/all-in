@@ -25,8 +25,10 @@ MobileClient.prototype = {
 		this.raiseBtn = document.querySelector('.raise');
 		this.foldBtn = document.querySelector('.fold');
 
+		this.raiseSlider = document.querySelector('#raise-slider');
 
 		this.notice = document.querySelector('.notice');
+
 		this._initComms();
 		this._addCallbacks();
 	},
@@ -79,12 +81,16 @@ MobileClient.prototype = {
 		this.socket.emit('player:info-update', { nickname:  nickname });
 	},
 
+	_onCheck: function(e) {
+		this.socket.emit('player:check');
+	},
 	_onCall: function(e) {
 		this.socket.emit('player:call');
 	},
 	_onRaise: function(e) {
+		var amount = this.raiseSlider.value;
 		this.socket.emit('player:raise', {
-			amount: 100
+			amount: amount
 		});
 	},
 	_onFold: function(e) {

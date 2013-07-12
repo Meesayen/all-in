@@ -25,6 +25,7 @@ block content
 			div.game-button.call CALL
 			div.game-button.raise RAISE
 			div.game-button.fold FOLD
-		div.raise-slider
+		div.raise-slider-box
+			input#raise-slider(type='range', min=10, max=100, step=5, value=10)
 
 	script(src='js/mobile/main.js')
