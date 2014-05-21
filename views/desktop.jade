@@ -1,43 +1,13 @@
 extends layout
 
 block head
-	link(rel='stylesheet', href='/stylesheets/desktop.css')
+	link(rel='stylesheet', href='/css/desktop.css')
 
 block content
-	div#lobby
-		div.page-box
-			div.game-title
-			div.page(data-phase='landing')
-				div.info Sync your phone to your computer to start playing.
-				div.phone-img
-					div.viewport
-						div.url-bar http://|
-						div.phone-page
-							div.title
-							div.input
-								div.cursor
-				div.arrow
-				div.url-box all-in.aws.af.cm
-				div.token-box
-				div.button.next NEXT
 
-		div.players
-
-	div#game-table
-		div.card-box
-			div#flop-1.card
-			div#flop-2.card
-			div#flop-3.card
-			div#turn.card
-			div#river.card
-		div.players
-			template.player-tmpl
-				div.player(data-status='waiting')
-					div.nickname
-					div.balance
-					div.status-label
-						div.raise-amount
+	div.game-area(data-state='lobby')
+		div.game-title
 
 	div.footer
 
-	script(src='js/desktop/main.js')
+	script(src='js/require.js', data-main="js/desktop/main.js")
