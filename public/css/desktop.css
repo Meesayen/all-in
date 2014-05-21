@@ -69,7 +69,7 @@ a {
 	max-width: 25%;
 	box-sizing: border-box;
 }
-#lobby .players .player {
+.players .player {
 	position: relative;
 	width: 120px;
 	height: 100px;
@@ -97,7 +97,7 @@ a {
 	-webkit-animation: player-float 650ms linear 0s infinite alternate;
 	animation: player-float 650ms linear 0s infinite alternate;
 }
-#lobby .players .player.float:after {
+.players .player.float:after {
 	content: '';
 	position: absolute;
 	width: 180px;
@@ -109,7 +109,7 @@ a {
 	-webkit-animation: shadow-expand 650ms linear 0s infinite alternate;
 	animation: shadow-expand 650ms linear 0s infinite alternate;
 }
-#lobby .players .player.puff {
+.players .player.puff {
 	-webkit-transform: translateY(0);
 	-webkit-animation: player-puff 200ms ease-out 0s;
 	animation: player-puff 200ms ease-out 0s;
