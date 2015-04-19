@@ -1,13 +1,13 @@
 extends layout
 
-block head
+block 'head'
 	link(rel='stylesheet', href='/css/desktop.css')
 
-block content
-
+block 'content'
 	div.game-area(data-state='lobby')
 		div.game-title
 
 	div.footer
 
-	script(src='js/require.js', data-main="js/desktop/main.js")
+block 'footer'
+	script(src='/js/desktop.js')

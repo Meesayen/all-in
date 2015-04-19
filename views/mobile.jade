@@ -1,9 +1,9 @@
 extends layout
 
-block head
+block 'head'
 	link(rel='stylesheet', href='/css/mobile.css')
 
-block content
+block 'content'
 	div#lobby
 		div.notice
 		div.page(data-phase='token-request')
@@ -28,4 +28,5 @@ block content
 		div.raise-slider-box
 			input#raise-slider(type='range', min=10, max=100, step=5, value=10)
 
-	script(src='js/mobile/main.js')
+block 'footer'
+	script(src='/js/mobile.js')

@@ -1,0 +1,80 @@
+{
+  "requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "requireCamelCaseOrUpperCaseIdentifiers": true,
+  "maximumLineLength": {
+    "value": 80,
+    "allowComments": true,
+    "allowRegex": true
+  },
+  "validateIndentation": 2,
+  "validateQuoteMarks": "'",
+  "validateParameterSeparator": ", ",
+
+  "disallowMultipleLineStrings": true,
+  "disallowMixedSpacesAndTabs": true,
+  "disallowTrailingWhitespace": true,
+  "disallowTrailingComma": true,
+  "disallowSpaceAfterPrefixUnaryOperators": true,
+  "disallowSpacesInCallExpression": true,
+  "disallowPaddingNewlinesInBlocks": true,
+  "requireCommaBeforeLineBreak": true,
+  "requireCapitalizedConstructors": true,
+
+  "disallowKeywordsOnNewLine": ["else", "catch", "finally"],
+
+  "requireSpaceAfterKeywords": [
+    "if",
+    "else",
+    "for",
+    "switch",
+    "return",
+    "try"
+  ],
+  "requireSpaceBeforeBinaryOperators": [
+    "=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", ">>>=",
+    "&=", "|=", "^=", "+=",
+    "+", "-", "*", "/", "%", "<<", ">>", ">>>", "&",
+    "|", "^", "&&", "||", "===", "==", ">=",
+    "<=", "<", ">", "!=", "!=="
+  ],
+  "requireSpaceAfterBinaryOperators": true,
+  "requireSpacesInConditionalExpression": true,
+  "requireSpaceBeforeBlockStatements": true,
+  "requireLineFeedAtFileEnd": true,
+  "requireSpacesInFunctionExpression": {
+      "beforeOpeningCurlyBrace": true
+  },
+  "disallowSpacesInAnonymousFunctionExpression": {
+      "beforeOpeningRoundBrace": true
+  },
+  "disallowSpacesInsideObjectBrackets": "nested",
+  "disallowSpacesInsideArrayBrackets": "nested",
+  "disallowSpacesInsideParentheses": true,
+  "disallowSpaceAfterObjectKeys": true,
+  "requireSpaceBeforeObjectValues": true,
+
+  "disallowNewlineBeforeBlockStatements": true,
+
+  "fileExtensions": [ ".js", "jscs", ".es6" ],
+
+  "requireParenthesesAroundIIFE": true,
+  "maximumLineLength": 80,
+  "validateLineBreaks": "LF",
+
+  "disallowKeywords": ["with"],
+  "disallowImplicitTypeConversion": ["string"],
+  "requireMultipleVarDecl": "onevar",
+
+  "safeContextKeyword": "_this",
+
+  "excludeFiles": [
+  ]
+}
