@@ -11,8 +11,6 @@ module.exports = function(config) {
       'client/scripts/mock/server.js',
       'client/scripts/**/*.test.js',
       { pattern: 'client/scripts/**/*.js',
-        included: false },
-      { pattern: 'client/scripts/**/*.js',
         included: false }
     ]),
     preprocessors: {

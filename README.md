@@ -7,4 +7,4 @@ all-in
 Live demo: [http://link.tothe.app/][1]
 
 
-  [1]: http://dummy/
+[1]: http://dummy/
