@@ -1,9 +1,16 @@
 /* global io */
 
+// TODO remove ugly >>> <<< comments as soon as decorators will behave
+// with jshint, or at least with its ignore:line directive
+
 import Lobby from '../desktop/lobby';
 import Players from '../desktop/players';
 import Table from '../desktop/table';
+import * as socket from '../core/decorators/socket'; // jshint ignore:line
 
+// >>>
+@socket.communicator
+// <<<
 class DesktopClient {
   constructor() {
     this._socket = io();
@@ -19,12 +26,12 @@ class DesktopClient {
     this._gameArea.appendChild(this._table.root);
   }
   run() {
-    this._initComms();
+    this.initializeSocketComm(this._socket);
   }
-  _initComms() {
-    this._socket.on('game:start', this._handleGameStart.bind(this));
-    this._socket.on('game:draw-flop', this._handleDrawFlop.bind(this));
-  }
+
+  // >>>
+  @socket.eventHandler('game:start')
+  // <<<
   _handleGameStart() {
     this._lobby.hide();
     this._lobby.destroy();
@@ -32,6 +39,9 @@ class DesktopClient {
     this._table.show();
   }
 
+  // >>>
+  @socket.eventHandler('game:draw-flop')
+  // <<<
   _handleDrawFlop(card) {
     console.log(card);
   }

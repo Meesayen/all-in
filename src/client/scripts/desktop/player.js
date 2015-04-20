@@ -1,11 +1,30 @@
-/* jshint ignore:start */
-import { renderSync, renderContentSync } from '../core/tpl';
-import { socketEventFilter } from '../core/decorators/socket';
+// TODO remove ugly >>> <<< comments as soon as decorators will behave
+// with jshint, or at least with its ignore:line directive
 
+import { renderSync, renderContentSync } from '../core/tpl';
+import * as socket from '../core/decorators/socket'; // jshint ignore:line
+
+const PLAYER_STATES = {
+  IDLE: 0,
+  READY: 1,
+  WAITING: 2,
+  THINKING: 3,
+  SMALL_BLIND: 5,
+  BIG_BLIND: 6,
+  FOLD: 7,
+  RAISE: 9,
+  CALL: 10,
+  BROKE: 11,
+  CHECK: 12
+};
+
+// >>>
+@socket.communicator
+// <<<
 export default class Player {
   constructor(player, socket) {
     this._socket = socket;
-    this._state = Player.IDLE_STATE;
+    this._state = PLAYER_STATES.IDLE;
     this.player = player;
     this._template = 'playerSlot';
 
@@ -23,23 +42,9 @@ export default class Player {
     this._root.addEventListener('animationEnd', this.__slotFloat);
     this._root.addEventListener('webkitAnimationEnd', this.__slotFloat);
 
-    this._initComms();
-  }
-
-  static getStates() {
-    return {
-      IDLE_STATE: 0,
-      READY_STATE: 1,
-      WAITING_STATE: 2,
-      THINKING_STATE: 3,
-      SMALL_BLIND_STATE: 5,
-      BIG_BLIND_STATE: 6,
-      FOLD_STATE: 7,
-      RAISE_STATE: 9,
-      CALL_STATE: 10,
-      BROKE_STATE: 11,
-      CHECK_STATE: 12
-    };
+    // this comes from the @socketController class decoration
+    // is this the best way? feels more like a mixin kind of stuff
+    this.initializeSocketComm(socket);
   }
 
   get state() {
@@ -85,19 +90,6 @@ export default class Player {
     this._root.classList.remove('float');
     this._root.classList.add('puff');
   }
-  _initComms() {
-    this._socket.on('game:start', this._onGameStart.bind(this));
-    this._socket.on('player:info-update',this._onInfoUpdate.bind(this));
-    this._socket.on('player:ready', this._onReady.bind(this));
-
-    // Game actions
-    this._socket.on('player:check', this._onCheck.bind(this));
-    this._socket.on('player:call', this._onCall.bind(this));
-    this._socket.on('player:raise', this._onRaise.bind(this));
-    this._socket.on('player:fold', this._onFold.bind(this));
-    this._socket.on('player:thinking', this._onThinking.bind(this));
-    this._socket.on('player:waiting', this._onWaiting.bind(this));
-  }
   _slotFloat() {
     this._root.classList.remove('pop');
     this._root.classList.add('float');
@@ -110,68 +102,96 @@ export default class Player {
     this._root.parentNode.removeChild(this._root);
   }
 
+  // >>>
+  @socket.eventHandler('game:start')
+  // <<<
   _onGameStart() {
     this._root.classList.remove('float');
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:info-update')
+  @socket.eventFilter('id')
+  // <<<
   _onInfoUpdate(player) {
     switch (player.state) {
-    case Player.WAITING_STATE:
+    case PLAYER_STATES.WAITING:
       player.status = 'waiting';
       break;
-    case Player.THINKING_STATE:
+    case PLAYER_STATES.THINKING:
       player.status = 'thinking';
       break;
-    case Player.READY_STATE:
+    case PLAYER_STATES.READY:
       player.status = 'ready!';
       break;
-    case Player.FOLD_STATE:
+    case PLAYER_STATES.FOLD:
       player.status = 'fold';
       break;
-    case Player.BROKE_STATE:
+    case PLAYER_STATES.BROKE:
       break;
     default:
       player.status = this.player.status;
       break;
     }
+    this.player = player;
     this.model = { player: player };
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:ready')
+  @socket.eventFilter('id')
+  // <<<
   _onReady() {
-    this.state = Player.getStates().READY_STATE;
+    this.state = PLAYER_STATES.READY;
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:check')
+  @socket.eventFilter('id')
+  // <<<
   _onCheck() {
-    this.state = Player.getStates().CHECK_STATE;
+    this.state = PLAYER_STATES.CHECK;
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:call')
+  @socket.eventFilter('id')
+  // <<<
   _onCall() {
     console.log('onCall');
-    this.state = Player.getStates().CALL_STATE;
+    this.state = PLAYER_STATES.CALL;
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:raise')
+  @socket.eventFilter('id')
+  // <<<
   _onRaise() {
-    this.state = Player.getStates().RAISE_STATE;
+    this.state = PLAYER_STATES.RAISE;
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:fold')
+  @socket.eventFilter('id')
+  // <<<
   _onFold() {
-    this.state = Player.getStates().FOLD_STATE;
+    this.state = PLAYER_STATES.FOLD;
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:waiting')
+  @socket.eventFilter('id')
+  // <<<
   _onWaiting() {
-    this.state = Player.getStates().WAITING_STATE;
+    this.state = PLAYER_STATES.WAITING;
   }
 
-  @socketEventFilter('id')
+  // >>>
+  @socket.eventHandler('player:thinking')
+  @socket.eventFilter('id')
+  // <<<
   _onThinking() {
-    this.state = Player.getStates().THINKING_STATE;
+    this.state = PLAYER_STATES.THINKING;
   }
 
   _updateState() {
@@ -179,33 +199,33 @@ export default class Player {
     this._root.classList.remove('thinking');
     this._root.classList.remove('broke');
     switch (this._state) {
-    case Player.getStates().WAITING_STATE:
+    case PLAYER_STATES.WAITING:
       this.player.status = 'waiting';
       break;
-    case Player.getStates().THINKING_STATE:
+    case PLAYER_STATES.THINKING:
       this._root.classList.add('thinking');
       this.player.status = 'thinking';
       break;
-    case Player.getStates().CHECK_STATE:
+    case PLAYER_STATES.CHECK:
       this.player.status = 'check';
       break;
-    case Player.getStates().CALL_STATE:
+    case PLAYER_STATES.CALL:
       this.player.status = 'call';
       break;
-    case Player.getStates().RAISE_STATE:
+    case PLAYER_STATES.RAISE:
       this.player.status = 'raise!';
       break;
-    case Player.getStates().FOLD_STATE:
+    case PLAYER_STATES.FOLD:
       this._root.classList.add('fold');
       this.player.status = 'fold';
       break;
-    case Player.getStates().IDLE_STATE:
+    case PLAYER_STATES.IDLE:
       this.player.status = 'not ready';
       break;
-    case Player.getStates().READY_STATE:
+    case PLAYER_STATES.READY:
       this.player.status = 'ready!';
       break;
-    case Player.getStates().BROKE_STATE:
+    case PLAYER_STATES.BROKE:
       this._root.classList.add('broke');
       this.player.status = 'broke!';
       break;

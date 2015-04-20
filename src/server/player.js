@@ -1,22 +1,7 @@
-var
-  EventEmitter = require("events").EventEmitter,
-  util = require("util");
-
-
-var Player = function(o) {
-  Player.super_.call(this);
-  this.id = null;
-  this.nickname = null;
-  this.balance = null;
-  this.socket = null;
-  this.ready = false;
-  this.state = null;
-  this.table = null;
-  this.init(o);
-};
+import { EventEmitter } from 'events';
 
 // Player Games States
-Player.STATES = {
+export const STATES = {
   LOBBY: 0,
   IDLE: 1,
   WAITING: 2,
@@ -27,164 +12,163 @@ Player.STATES = {
   FOLDED: 7
 };
 
-util.inherits(Player, EventEmitter);
+export default class Player extends EventEmitter {
+  constructor(o) {
+    super();
+    this.id = o.id;
+    this.nickname = o.nickname;
+    this.balance = o.balance;
+    this.socket = o.socket;
+    this.table = o.table;
+    this.state = STATES.LOBBY;
+    this.ready = false;
+    this.cards = [];
 
-Player.prototype.init = function(o) {
-  this.state = Player.STATES.LOBBY;
-  this.id = o.id;
-  this.nickname = o.nickname;
-  this.balance = o.balance;
-  this.socket = o.socket;
-  this.cards = [];
-  this.table = o.table;
-
-  this.socket.emit('game:connected', {
-    nickname: this.nickname,
-    balance: this.balance,
-    id: this.id
-  });
-  this._initComms();
-};
-Player.prototype._initComms = function() {
-  this.socket.on('disconnect', this._handleDisconnect.bind(this));
-  this.socket.on('player:ready', this._handleReady.bind(this));
-  this.socket.on('player:info-update', this._handleInfoUpdate.bind(this));
-
-  // Game actions
-  this.socket.on('player:check', this._handleCheck.bind(this));
-  this.socket.on('player:call', this._handleCall.bind(this));
-  this.socket.on('player:raise', this._handleRaise.bind(this));
-  this.socket.on('player:fold', this._handleFold.bind(this));
-};
-
-Player.prototype._changeState = function(state) {
-  this.state = state;
-  switch (state) {
-  case Player.STATES.LOBBY:
-    break;
-  case Player.STATES.IDLE:
-    break;
-  case Player.STATES.WAITING:
-    this.socket.emit('player:wait-to-bet');
-    break;
-  case Player.STATES.THINKING:
-    this.socket.emit('player:my-turn');
-    break;
-  case Player.STATES.SMALL_BLIND:
-    this.socket.emit('player:my-turn', {state: 'small-blind'});
-    break;
-  case Player.STATES.BIG_BLIND:
-    this.socket.emit('player:my-turn', {state: 'big-blind'});
-    break;
-  case Player.STATES.BET_DONE:
-    this.socket.emit('player:ack-bet');
-    break;
-  case Player.STATES.FOLDED:
-    this.socket.emit('player:ack-fold');
-    break;
+    this.socket.emit('game:connected', {
+      nickname: this.nickname,
+      balance: this.balance,
+      id: this.id
+    });
+    this._initComms();
   }
-};
-Player.prototype._handleDisconnect = function(socket) {
-  this.emit('disconnection', {
-    id: this.id
-  });
-};
-Player.prototype._handleReady = function() {
-  this.ready = true;
-  this.emit('ready', {
-    id: this.id
-  });
-  this.socket.emit('player:ack-ready');
-};
-Player.prototype._handleInfoUpdate = function(data) {
-  this.nickname = data.nickname;
-  this.emit('info-update', {
-    id: this.id,
-    cash: this.balance,
-    nickname: this.nickname
-  });
-  this.emit('update', this._getInfo());
-};
-Player.prototype._emitUpdate = function() {
-  this.emit('update', {
-    id: this.id,
-    balance: this.balance,
-    nickname: this.nickname,
-    status: this.status
-  });
-};
 
-Player.prototype.handleGameStart = function() {
-  this.socket.emit('game:start');
-  this.cards = [];
-};
+  _initComms() {
+    this.socket.on('disconnect', this._handleDisconnect.bind(this));
+    this.socket.on('player:ready', this._handleReady.bind(this));
+    this.socket.on('player:info-update', this._handleInfoUpdate.bind(this));
 
-Player.prototype.setState = function(state) {
-  this._changeState(state);
-};
-Player.prototype.doSmallBlind = function() {
-  var bet = this.table.minBet / 2;
-  var info = this._getInfo();
-  this.balance -= bet;
-  info.bet = bet;
-  this.state = Player.STATES.SMALL_BLIND;
-  this.emit('update', info);
-  return bet;
-};
-Player.prototype.doBigBlind = function() {
-  var bet = this.table.minBet;
-  var info = this._getInfo();
-  this.balance -= bet;
-  info.bet = bet;
-  this.state = Player.STATES.BIG_BLIND;
-  this.emit('update', info);
-  return bet;
-};
+    // Game actions
+    this.socket.on('player:check', this._handleCheck.bind(this));
+    this.socket.on('player:call', this._handleCall.bind(this));
+    this.socket.on('player:raise', this._handleRaise.bind(this));
+    this.socket.on('player:fold', this._handleFold.bind(this));
+  }
 
-Player.prototype.takeCard = function(card) {
-  this.cards.push(card);
-  this.socket.emit('player:new-card', card);
-};
+  _changeState(state) {
+    this.state = state;
+    switch (state) {
+    case STATES.LOBBY:
+      break;
+    case STATES.IDLE:
+      break;
+    case STATES.WAITING:
+      this.socket.emit('player:wait-to-bet');
+      break;
+    case STATES.THINKING:
+      this.socket.emit('player:my-turn');
+      break;
+    case STATES.SMALL_BLIND:
+      this.socket.emit('player:my-turn', {state: 'small-blind'});
+      break;
+    case STATES.BIG_BLIND:
+      this.socket.emit('player:my-turn', {state: 'big-blind'});
+      break;
+    case STATES.BET_DONE:
+      this.socket.emit('player:ack-bet');
+      break;
+    case STATES.FOLDED:
+      this.socket.emit('player:ack-fold');
+      break;
+    }
+  }
+  _handleDisconnect() {
+    this.emit('disconnection', {
+      id: this.id
+    });
+  }
+  _handleReady() {
+    this.ready = true;
+    this.emit('ready', {
+      id: this.id
+    });
+    this.socket.emit('player:ack-ready');
+  }
+  _handleInfoUpdate(data) {
+    this.nickname = data.nickname;
+    this.emit('info-update', {
+      id: this.id,
+      cash: this.balance,
+      nickname: this.nickname
+    });
+    this.emit('update', this.info);
+  }
+  _emitUpdate() {
+    this.emit('update', {
+      id: this.id,
+      balance: this.balance,
+      nickname: this.nickname,
+      status: this.status
+    });
+  }
 
-Player.prototype._handleCheck = function() {
-  this.emit('check', this);
-  this._changeState(Player.STATES.CHECK);
-};
+  handleGameStart() {
+    this.socket.emit('game:start');
+    this.cards = [];
+  }
 
-Player.prototype._handleCall = function() {
-  this._changeState(Player.STATES.BET_DONE);
-  this.emit('call', this);
-  this.balance -= this.table.minBet;
-  var info = this._getInfo();
-  info.betType = 'call';
-  this.emit('update', info);
-};
-Player.prototype._handleRaise = function(amount) {
-  this._changeState(Player.STATES.BET_DONE);
-  this.emit('raise', {
-    id: this.id,
-    amount: amount
-  });
-  this.balance -= amount;
-  var info = this._getInfo();
-  info.betType = 'raise';
-  info.bet = amount;
-  this.emit('update', info);
-};
-Player.prototype._handleFold = function() {
-  this._changeState(Player.STATES.FOLDED);
-  this.emit('fold', {id: this.id});
-  var info = this._getInfo();
-  this.emit('update', info);
-};
-Player.prototype._getInfo = function() {
-  return {
-    id: this.id,
-    nickname: this.nickname,
-    cash: this.balance,
-    state: this.state
-  };
-};
+  setState(state) {
+    this._changeState(state);
+  }
+  doSmallBlind() {
+    let bet = this.table.minBet / 2;
+    let info = this.info;
+    this.balance -= bet;
+    info.bet = bet;
+    this.state = STATES.SMALL_BLIND;
+    this.emit('update', info);
+    return bet;
+  }
+  doBigBlind() {
+    let bet = this.table.minBet;
+    let info = this.info;
+    this.balance -= bet;
+    info.bet = bet;
+    this.state = STATES.BIG_BLIND;
+    this.emit('update', info);
+    return bet;
+  }
 
+  takeCard(card) {
+    this.cards.push(card);
+    this.socket.emit('player:new-card', card);
+  }
 
-module.exports = Player;
+  _handleCheck() {
+    this.emit('check', this);
+    this._changeState(STATES.CHECK);
+  }
+
+  _handleCall() {
+    this._changeState(STATES.BET_DONE);
+    this.emit('call', this);
+    this.balance -= this.table.minBet;
+    let info = this.info;
+    info.betType = 'call';
+    this.emit('update', info);
+  }
+  _handleRaise(amount) {
+    this._changeState(STATES.BET_DONE);
+    this.emit('raise', {
+      id: this.id,
+      amount: amount
+    });
+    this.balance -= amount;
+    let info = this.info;
+    info.betType = 'raise';
+    info.bet = amount;
+    this.emit('update', info);
+  }
+  _handleFold() {
+    this._changeState(STATES.FOLDED);
+    this.emit('fold', {id: this.id});
+    this.emit('update', this.info);
+  }
+  get info() {
+    return {
+      id: this.id,
+      nickname: this.nickname,
+      cash: this.balance,
+      state: this.state
+    };
+  }
+}

@@ -1,7 +1,15 @@
-import { renderSync, renderContentSync } from '../core/tpl';
+// TODO remove ugly >>> <<< comments as soon as decorators will behave
+// with jshint, or at least with its ignore:line directive
 
+import { renderSync, renderContentSync } from '../core/tpl';
+import * as socket from '../core/decorators/socket'; // jshint ignore:line
+
+// >>>
+@socket.communicator
+// <<<
 export default class Lobby {
   constructor(socket) {
+    this._socket = socket;
     this._template = 'lobby';
     this._model = [];
     this._root = renderSync('lobby', []);
@@ -20,8 +28,7 @@ export default class Lobby {
     this._onNextClick = this._onNextHandler.bind(this);
     this._root.querySelector('.button.next')
         .addEventListener('click', this._onNextClick);
-    this._socket = socket;
-    this._bindSocketEvents();
+    this.initializeSocketComm(socket);
   }
   get root() {
     return this._root;
@@ -55,11 +62,6 @@ export default class Lobby {
   destroy() {
     // TODO deinitComms, remove listeners, remove from DOM
   }
-  _bindSocketEvents() {
-    this._socket.on('game:tokenized', this._handleGameTokenReceived.bind(this));
-    this._socket.on('game:ready-to-play', this._handleReadyToPlay.bind(this));
-    this._socket.on('game:not-ready-to-play', this._handleNotReadyToPlay.bind(this));
-  }
   _onNextHandler() {
     let state = this._states.current;
     if (state === this._states.LANDING) {
@@ -82,12 +84,24 @@ export default class Lobby {
     this._next.classList.add('disabled');
     this._socket.emit('web:connection');
   }
+
+  // >>>
+  @socket.eventHandler('game:tokenized')
+  // <<<
   _handleGameTokenReceived(data) {
     this._token.textContent = data.token;
   }
+
+  // >>>
+  @socket.eventHandler('game:ready-to-play')
+  // <<<
   _handleReadyToPlay() {
     this._next.classList.remove('disabled');
   }
+
+  // >>>
+  @socket.eventHandler('game:not-ready-to-play')
+  // <<<
   _handleNotReadyToPlay() {
     this._next.classList.add('disabled');
   }

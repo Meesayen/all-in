@@ -1,47 +1,41 @@
-var
-  EventEmitter = require("events").EventEmitter,
-  util = require("util");
+import { EventEmitter } from 'events';
 
-var SEEDS = [
+const SEEDS = [
   'hearts',
   'diamonds',
   'spades',
   'clubs'
 ];
 
-var VALUES = [
+const VALUES = [
   'A', '2', '3', '4', '5', '6', '7',
   '8', '9', '10', 'J', 'Q', 'K'
 ];
 
-var Card = function(seed, value) {
-  this.seed = seed;
-  this.value = value;
-};
-
-var Deck = function(o) {
-  Deck.super_.call(this);
-  this.cards = [];
-  this.init(o);
-};
-
-util.inherits(Deck, EventEmitter);
-
-Deck.prototype.init = function(o) {
-  this.shuffle();
-};
-Deck.prototype.shuffle = function(o) {
-  this.cards = [];
-  for (var i = 0, seed; seed = SEEDS[i]; i++) {
-    for (var j = 0, value; value = VALUES[j]; j++) {
-      this.cards.push(new Card(seed, value));
-    }
+class Card {
+  constructor(seed, value) {
+    this.seed = seed;
+    this.value = value;
   }
-};
-Deck.prototype.pick = function() {
-  var randIdx = Math.floor(Math.random() * this.cards.length);
-  var card = this.cards.splice(randIdx, 1)[0];
-  return card;
-};
+}
 
-module.exports = Deck;
+export default class Deck extends EventEmitter {
+  constructor() {
+    super();
+    this.cards = [];
+    this.shuffle();
+  }
+  shuffle() {
+    this.cards = [];
+    SEEDS.forEach(seed => {
+      VALUES.forEach(value => {
+        this.cards.push(new Card(seed, value));
+      });
+    });
+  }
+  pick() {
+    let randIdx = Math.floor(Math.random() * this.cards.length);
+    let card = this.cards.splice(randIdx, 1)[0];
+    return card;
+  }
+}

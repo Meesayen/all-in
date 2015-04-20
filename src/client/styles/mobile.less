@@ -34,12 +34,13 @@ a {
   font-weight: bold;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   border-radius: 0 0 8px 8px;
-}
-.notice.show {
-  top: 0;
-  opacity: 1;
-  -webkit-transition: top 350ms linear, opacity 550ms linear;
-  transition: top 350ms linear, opacity 550ms linear;
+
+  &.show {
+    top: 0;
+    opacity: 1;
+    -webkit-transition: top 350ms linear, opacity 550ms linear;
+    transition: top 350ms linear, opacity 550ms linear;
+  }
 }
 
 input[type="text"],
@@ -107,20 +108,6 @@ input[type="text"],
   background-repeat: no-repeat;
 }
 
-.page[data-player-id="player1"] {
-  background-color: #f36f62;
-}
-.page[data-player-id="player2"] {
-  background-color: #fbbe63;
-}
-.page[data-player-id="player3"] {
-  background-color: #7ec255;
-}
-.page[data-player-id="player4"] {
-  background-color: #40afc3;
-}
-
-
 .player-info {
   display: none;
 }
@@ -146,50 +133,60 @@ input[type="text"],
   text-align: center;
   transition: background-color 350ms linear;
   background-image: url(../images/noise.png);
-}
-.page.exit {
-  -webkit-animation: box-out 650ms linear 0s forwards;
-  animation: box-out 650ms linear 0s forwards;
-}
-.page.enter {
-  -webkit-animation: box-in 650ms linear 50ms forwards;
-  animation: box-in 650ms linear 50ms forwards;
-}
 
+  &.exit {
+    -webkit-animation: box-out 650ms linear 0s forwards;
+    animation: box-out 650ms linear 0s forwards;
+  }
+  &.enter {
+    -webkit-animation: box-in 650ms linear 50ms forwards;
+    animation: box-in 650ms linear 50ms forwards;
+  }
 
-.page[data-phase="info-update"] .token {
-  display: none;
-}
-.page[data-phase="info-update"] .label {
-  -webkit-animation: slide-up 350ms ease-in 50ms forwards;
-  animation: slide-up 350ms ease-in 50ms forwards;
-}
-.page[data-phase="info-update"] .player-info {
-  display: block;
-}
+  &[data-player-id="player1"] {
+    background-color: #f36f62;
+  }
+  &[data-player-id="player2"] {
+    background-color: #fbbe63;
+  }
+  &[data-player-id="player3"] {
+    background-color: #7ec255;
+  }
+  &[data-player-id="player4"] {
+    background-color: #40afc3;
+  }
 
-.page[data-phase="waiting"] .waiting-msg {
-  display: block;
-  display: block;
-  line-height: 135px;
-  color: rgb(255, 255, 255);
-  font-size: 40px;
-  top: 50%;
-  position: absolute;
-  left: 50%;
-  margin-left: -230px;
-  margin-top: -130px;
-}
-.page[data-phase="waiting"] .token {
-  display: none;
-}
-.page[data-phase="waiting"] .label {
-  display: none;
-}
-.page[data-phase="waiting"] .button {
-  display: none;
-}
+  &[data-phase="info-update"] {
+    .token {
+      display: none;
+    }
+    .label {
+      -webkit-animation: slide-up 350ms ease-in 50ms forwards;
+      animation: slide-up 350ms ease-in 50ms forwards;
+    }
+    .player-info {
+      display: block;
+    }
+  }
 
+  &[data-phase="waiting"] {
+    .waiting-msg {
+      display: block;
+      color: #fff;
+      font-size: 35px;
+      top: 50%;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+    }
+    .label,
+    .token,
+    .button {
+      display: none;
+    }
+  }
+}
 
 
 @-webkit-keyframes slide-up {
@@ -226,33 +223,34 @@ input[type="text"],
   height: 160px;
   display: inline-block;
   margin-right: 10px;
+
+  &:after {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    font-size: 30px
+  }
+  &[data-seed="hearts"]:after {
+    content: '♥';
+    color: red;
+  }
+  &[data-seed="clubs"]:after {
+    content: '♣';
+    color: black;
+  }
+  &[data-seed="diamonds"]:after {
+    content: '♦';
+    color: red;
+  }
+  &[data-seed="spades"]:after {
+    content: '♠';
+    color: black;
+  }
 }
 #card-2 {
   margin: 0;
 }
 
-.card:after {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  font-size: 30px
-}
-.card[data-seed="hearts"]:after {
-  content: '♥';
-  color: red;
-}
-.card[data-seed="clubs"]:after {
-  content: '♣';
-  color: black;
-}
-.card[data-seed="diamonds"]:after {
-  content: '♦';
-  color: red;
-}
-.card[data-seed="spades"]:after {
-  content: '♠';
-  color: black;
-}
 
 .buttons {
   position: absolute;
