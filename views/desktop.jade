@@ -6,8 +6,10 @@ block 'head'
 block 'content'
   div.game-area(data-state='lobby')
     div.game-title
-
   div.footer
 
 block 'footer'
-  script(src='/js/desktop.js')
+  link(rel="import", href="/components/desktop/lobby.html")
+  //- script(src='/js/pages/desktop.js')
+  script(src='/js/main.js')
+    

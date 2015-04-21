@@ -405,15 +405,15 @@ a {
 
 /* Animate istructions page */
 
-.page[data-phase="instructions"] .phone-img {
+ai-lobby[state="instructions"] .phone-img {
   -webkit-animation: phone-slide 400ms ease-out 0ms forwards;
   animation: phone-slide 400ms ease-out 0ms forwards;
 }
-.page[data-phase="instructions"] .phone-img .url-bar {
+ai-lobby[state="instructions"] .phone-img .url-bar {
   -webkit-animation: phone-url-bar-down 200ms ease-out 400ms forwards;
   animation: phone-url-bar-down 200ms ease-out 400ms forwards;
 }
-.page[data-phase="instructions"] .arrow {
+ai-lobby[state="instructions"] .arrow {
   opacity: 1;
   left: 122px;
   transition:
@@ -422,38 +422,38 @@ a {
   -webkit-animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
   animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
 }
-.page[data-phase="instructions"] .url-box {
+ai-lobby[state="instructions"] .url-box {
   -webkit-animation: fade-in 200ms ease-out 350ms forwards;
   animation: fade-in 200ms ease-out 350ms forwards;
 }
 
 /* Animate token page */
 
-.page[data-phase="token"] .phone-img {
+ai-lobby[state="token"] .phone-img {
   -webkit-transform: translateX(-170px);
 }
-.page[data-phase="token"] .phone-img .url-bar {
+ai-lobby[state="token"] .phone-img .url-bar {
   -webkit-animation: phone-url-bar-up 150ms ease-out 0ms forwards;
   animation: phone-url-bar-up 150ms ease-out 0ms forwards;
 }
-.page[data-phase="token"] .phone-img .phone-page {
+ai-lobby[state="token"] .phone-img .phone-page {
   opacity: 1;
   transition: opacity 300ms ease-out 150ms;
 }
-.page[data-phase="token"] .phone-img .phone-page .cursor {
+ai-lobby[state="token"] .phone-img .phone-page .cursor {
   -webkit-animation: fade-in 600ms linear 0ms alternate infinite;
   animation: fade-in 600ms linear 0ms alternate infinite;
 }
-.page[data-phase="token"] .arrow {
+ai-lobby[state="token"] .arrow {
   left: 122px;
   opacity: 1;
   -webkit-animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
   animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
 }
-.page[data-phase="token"] .url-box {
+ai-lobby[state="token"] .url-box {
   opacity: 0;
 }
-.page[data-phase="token"] .token-box {
+ai-lobby[state="token"] .token-box {
   opacity: 1;
   -webkit-animation: token-box-fade-in 350ms ease-out 0ms forwards;
   animation: token-box-fade-in 350ms ease-out 0ms forwards;

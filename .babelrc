@@ -3,6 +3,5 @@
   "ignore": [
     "**/faker.js",
     "**/components/lib/**/*"
-  ],
-  "optional": ["runtime"]
+  ]
 }

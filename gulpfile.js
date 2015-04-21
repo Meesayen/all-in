@@ -73,7 +73,7 @@ gladius.setupTasks({
     src: []
   },
   'bundle-js:dev': {
-    deps: ['bundle-mock-server', 'copy:components', '!lint', '!babelify'],
+    deps: ['copy:components', '!lint', '!babelify'],
     src: []
   },
   'lint': {
@@ -91,21 +91,6 @@ gladius.setupTasks({
  * ------------------------------------------------------------------------- */
 var $ = gladius.getPlugins();
 
-
-/* Mock server bundling */
-gulp.task('bundle-mock-server', ['lint', 'babelify'], function() {
-  return gulp.src(['src/temp/mock/server.js'])
-  .pipe($.browserify({
-    insertGlobals: false,
-    debug: true
-  }))
-  .pipe($.rename(function (path) {
-    path.basename = 'mock-server';
-    path.extname = '.js';
-  }))
-  .pipe(gulp.dest('public/js/'));
-});
-
 // TODO: better bundling. System.js module?
 gulp.task('copy:components:js', function() {
   return gulp.src([
@@ -114,7 +99,9 @@ gulp.task('copy:components:js', function() {
   .pipe($.jshint({
     lookup: true
   }))
-  .pipe($.babel())
+  .pipe($.babel({
+    modules: 'system'
+  }))
   .pipe(gulp.dest('public/components'));
 });
 gulp.task('copy:components', ['copy:components:js'], function() {
@@ -131,6 +118,29 @@ gulp.task('copy:assets', function() {
   ])
   .pipe(gulp.dest('public'));
 });
+
+gulp.task('babelify', ['copy'], function () {
+  return gulp.src([
+    'src/client/scripts/**/*.js'
+  ])
+  .pipe($.babel({
+    modules: 'system'
+  }))
+  // .on('error', handleError)
+  // .pipe($.jsvalidate())
+  // .on('error', handleError)
+  .pipe(gulp.dest('src/temp/'));
+});
+
+gulp.task('bundle-js:dev', ['babelify', 'copy:components'], function() {
+  return gulp.src([
+    'src/temp/**/*.js',
+    '!src/temp/**/*.test.js',
+  ])
+  // .pipe($.uglify())
+  .pipe(gulp.dest('public/js'));
+});
+
 
 /**
  * Add extra gulp watchers below

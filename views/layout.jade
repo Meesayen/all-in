@@ -5,6 +5,11 @@ meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scal
 meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
 
 script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js')
+script(src='/components/lib/systemjs/dist/system.js')
+script(src='/components/lib/webcomponentsjs/webcomponents-lite.min.js')
+
+link(rel='import', href='/components/lib/polymer/polymer.html')
+    
 block 'head'
 
 block 'content'
@@ -14,7 +19,6 @@ include vendorscripts
 //- For Debugging Purposes Only
 if __dev__
   script(type='text/javascript', src='/js/mock-server.js')
-
 
 //- Core Scripts
 script(type='text/javascript', src='/js/templates.js')
