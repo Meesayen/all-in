@@ -1,31 +1,33 @@
 extends layout
 
-block head
-	link(rel='stylesheet', href='/css/mobile.css')
+block 'head'
+  link(rel='stylesheet', href='/css/mobile.css')
 
-block content
-	div#lobby
-		div.notice
-		div.page(data-phase='token-request')
-			div.game-title
-			input.token(type='text', placeholder='token...', maxlength='5')
-			div.label Nickname
-			input.player-info(type='text', maxlength='8', name='nickname')
-			div.button.next SEND
+block 'content'
+  div#lobby
+    div.notice
+    div.page(data-phase='token-request')
+      div.game-title
+      input.token(type='text', placeholder='token...', maxlength='5')
+      div.label Nickname
+      input.player-info(type='text', maxlength='8', name='nickname')
+      div.button.next SEND
 
-			span.waiting-msg Wait for the game to start...
+      span.waiting-msg Wait for the game to start...
 
-	div#game-table
-		div.cards
-			div#card-1.card
-				div.value
-			div#card-2.card
-				div.value
-		div.buttons
-			div.game-button.call CALL
-			div.game-button.raise RAISE
-			div.game-button.fold FOLD
-		div.raise-slider-box
-			input#raise-slider(type='range', min=10, max=100, step=5, value=10)
+  div#game-table
+    div.cards
+    div.buttons
+      div.game-button.call CALL
+      div.game-button.raise RAISE
+      div.game-button.fold FOLD
+    div.raise-slider-box
+      input#raise-slider(type='range', min=10, max=100, step=5, value=10)
 
-	script(src='js/mobile/main.js')
+block 'footer'
+  div(style='display:none')
+    include ../assets/cards.svg
+  link(rel="import", href="/components/common/card.html")
+  script
+    | System.transpiler = 'babel';
+    | System.import('./js/pages/mobile');

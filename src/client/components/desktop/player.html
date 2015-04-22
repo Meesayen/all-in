@@ -1,0 +1,10 @@
+<dom-module id="ai-player">
+  <template>
+    <div id="balloon" class="player pop" player-id$='{{player.id}}'>
+      <div class="cash">{{player.cash}}</div>
+      <div class="nickname">{{player.nickname}}</div>
+      <div class="status">{{player.status}}</div>
+    </div>
+  </template>
+</dom-module>
+<script>System.import('./components/desktop/player')</script>

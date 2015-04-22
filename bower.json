@@ -1,0 +1,21 @@
+{
+  "name": "all-in",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Meesayen/all-in",
+  "authors": [
+    "Meesayen <gvg.fede@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/client/components/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.8.0-rc.2",
+    "systemjs": "systemjs/systemjs#~0.16.7"
+  }
+}

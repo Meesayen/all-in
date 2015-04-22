@@ -1,0 +1,23 @@
+<dom-module id="ai-card">
+
+  <style>
+    :host {
+      display: inline-block;
+      width: 180px;
+      height: 250px;
+      box-sizing: border-box;
+      box-shadow: -2px 2px 9px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      margin: 0 5px;
+    }
+  </style>
+
+  <template>
+    <svg id="card" class="card">
+      <use id="use"/>
+    </svg>
+  </template>
+
+</dom-module>
+
+<script>System.import('./components/common/card')</script>
