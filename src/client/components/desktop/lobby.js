@@ -35,14 +35,6 @@ class Lobby {
     // TODO kill communications
   }
 
-  get socket() {
-    return this._socket;
-  }
-  set socket(socket) {
-    this._socket = socket;
-    this.initializeSocketComm(socket);
-  }
-
   _onNextHandler() {
     let state = this.state;
     if (state === STATES.LANDING) {

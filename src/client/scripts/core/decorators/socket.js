@@ -1,13 +1,22 @@
 let map = new WeakMap();
 export function communicator(target) {
   let listenersMap = map.get(target);
-  Object.defineProperty(target.prototype, 'initializeSocketComm', {
+  Object.defineProperty(target.prototype, '_initializeSocketComm', {
     value: function(socket) {
       if (listenersMap) {
         Object.keys(listenersMap).forEach(key => {
           socket.on(key, this[listenersMap[key]].bind(this));
         });
       }
+    }
+  });
+  Object.defineProperty(target.prototype, 'socket', {
+    set: function(socket) {
+      this._socket = socket;
+      this._initializeSocketComm(socket);
+    },
+    get: function() {
+      return this._socket;
     }
   });
 }

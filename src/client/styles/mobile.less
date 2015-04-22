@@ -208,55 +208,32 @@ input[type="text"],
 }
 
 .cards {
-  width: 240px;
-  height: 180px;
+  zoom: 1.2;
+  height: 300px;
+  width: 190px;
   position: absolute;
-  top: 50%;
-  margin-top: -160px;
-  left: 50px;
-  padding: 10px;
+  top: 50px;
+  left: 50%;
   box-sizing: border-box;
-}
+  transform: translateX(-50%);
 
-.card {
-  width: 100px;
-  height: 160px;
-  display: inline-block;
-  margin-right: 10px;
-
-  &:after {
+  ai-card {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    font-size: 30px
+    top: 0;
   }
-  &[data-seed="hearts"]:after {
-    content: '♥';
-    color: red;
+  ai-card:nth-child(1) {
+    left: -40px
   }
-  &[data-seed="clubs"]:after {
-    content: '♣';
-    color: black;
-  }
-  &[data-seed="diamonds"]:after {
-    content: '♦';
-    color: red;
-  }
-  &[data-seed="spades"]:after {
-    content: '♠';
-    color: black;
+  ai-card:nth-child(2) {
+    right: -40px;
   }
 }
-#card-2 {
-  margin: 0;
-}
-
 
 .buttons {
   position: absolute;
   width: 300px;
-  height: 100px;
-  top: 320px;
+  height: auto;
+  bottom: 50px;
   right: 10px;
 }
 
@@ -276,4 +253,8 @@ input[type="text"],
   box-shadow: inset 0 4px #a6ff70;
   line-height: 65px;
   text-shadow: 0 -1px #207f26;
+}
+
+.raise-slider-box {
+  display: none;
 }

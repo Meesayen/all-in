@@ -1,8 +1,9 @@
+/* global Polymer */
+
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-import { renderSync, renderContentSync } from '../core/tpl';
-import * as socket from '../core/decorators/socket'; // jshint ignore:line
+import * as socket from '../../js/core/decorators/socket'; // jshint ignore:line
 
 const PLAYER_STATES = {
   IDLE: 0,
@@ -21,30 +22,22 @@ const PLAYER_STATES = {
 // >>>
 @socket.communicator
 // <<<
-export default class Player {
-  constructor(player, socket) {
-    this._socket = socket;
-    this._state = PLAYER_STATES.IDLE;
-    this.player = player;
-    this._template = 'playerSlot';
+class Player {
+  constructor() {
+  }
 
-    this.player.status = 'not ready';
-
-    this._model = {
-      player: this.player
-    };
-
-    this._root = renderSync(this._template, this._model);
+  ready() {
+    this.player = {};
 
     this.__slotFloat = this._slotFloat.bind(this);
     this.__removeFromDom = this._removeFromDom.bind(this);
 
-    this._root.addEventListener('animationEnd', this.__slotFloat);
-    this._root.addEventListener('webkitAnimationEnd', this.__slotFloat);
+    this.$.balloon.addEventListener('animationEnd', this.__slotFloat);
+    this.$.balloon.addEventListener('webkitAnimationEnd', this.__slotFloat);
+  }
 
-    // this comes from the @socketController class decoration
-    // is this the best way? feels more like a mixin kind of stuff
-    this.initializeSocketComm(socket);
+  attached() {
+    this.state = PLAYER_STATES.IDLE;
   }
 
   get state() {
@@ -57,56 +50,33 @@ export default class Player {
     }
   }
 
-  get root() {
-    return this._root;
-  }
-
-  get model() {
-    return this._model;
-  }
-  set model(model) {
-    this._model = model;
-    this._refresh();
-  }
-
   get id() {
     return this.player.id;
   }
 
-  _refresh() {
-    let firstchild;
-    let children = renderContentSync(this._template, this._model);
-    while ((firstchild = this._root.firstChild)) {
-      this._root.removeChild(firstchild);
-    }
-    while ((firstchild = children.firstChild)) {
-      this._root.appendChild(firstchild);
-    }
-  }
-
-  remove() {
-    this._root.addEventListener('animationEnd', this.__removeFromDom);
-    this._root.addEventListener('webkitAnimationEnd', this.__removeFromDom);
-    this._root.classList.remove('float');
-    this._root.classList.add('puff');
+  destroy() {
+    this.$.balloon.addEventListener('animationEnd', this.__removeFromDom);
+    this.$.balloon.addEventListener('webkitAnimationEnd', this.__removeFromDom);
+    this.$.balloon.classList.remove('float');
+    this.$.balloon.classList.add('puff');
   }
   _slotFloat() {
-    this._root.classList.remove('pop');
-    this._root.classList.add('float');
-    this._root.removeEventListener('animationEnd', this.__slotFloat);
-    this._root.removeEventListener('webkitAnimationEnd', this.__slotFloat);
+    this.$.balloon.classList.remove('pop');
+    this.$.balloon.classList.add('float');
+    this.$.balloon.removeEventListener('animationEnd', this.__slotFloat);
+    this.$.balloon.removeEventListener('webkitAnimationEnd', this.__slotFloat);
   }
   _removeFromDom() {
-    this._root.removeEventListener('animationEnd', this.__removeFromDom);
-    this._root.removeEventListener('webkitAnimationEnd', this.__removeFromDom);
-    this._root.parentNode.removeChild(this._root);
+    this.$.balloon.removeEventListener('animationEnd', this.__removeFromDom);
+    this.$.balloon.removeEventListener('webkitAnimationEnd', this.__removeFromDom);
+    this.remove();
   }
 
   // >>>
   @socket.eventHandler('game:start')
   // <<<
   _onGameStart() {
-    this._root.classList.remove('float');
+    this.$.balloon.classList.remove('float');
   }
 
   // >>>
@@ -134,7 +104,6 @@ export default class Player {
       break;
     }
     this.player = player;
-    this.model = { player: player };
   }
 
   // >>>
@@ -195,41 +164,49 @@ export default class Player {
   }
 
   _updateState() {
-    this._root.classList.remove('fold');
-    this._root.classList.remove('thinking');
-    this._root.classList.remove('broke');
+    let player = this.player;
+    this.$.balloon.classList.remove('fold');
+    this.$.balloon.classList.remove('thinking');
+    this.$.balloon.classList.remove('broke');
     switch (this._state) {
     case PLAYER_STATES.WAITING:
-      this.player.status = 'waiting';
+      player.status = 'waiting';
       break;
     case PLAYER_STATES.THINKING:
-      this._root.classList.add('thinking');
-      this.player.status = 'thinking';
+      this.$.balloon.classList.add('thinking');
+      player.status = 'thinking';
       break;
     case PLAYER_STATES.CHECK:
-      this.player.status = 'check';
+      player.status = 'check';
       break;
     case PLAYER_STATES.CALL:
-      this.player.status = 'call';
+      player.status = 'call';
       break;
     case PLAYER_STATES.RAISE:
-      this.player.status = 'raise!';
+      player.status = 'raise!';
       break;
     case PLAYER_STATES.FOLD:
-      this._root.classList.add('fold');
-      this.player.status = 'fold';
+      this.$.balloon.classList.add('fold');
+      player.status = 'fold';
       break;
     case PLAYER_STATES.IDLE:
-      this.player.status = 'not ready';
+      player.status = 'not ready';
       break;
     case PLAYER_STATES.READY:
-      this.player.status = 'ready!';
+      player.status = 'ready!';
       break;
     case PLAYER_STATES.BROKE:
-      this._root.classList.add('broke');
-      this.player.status = 'broke!';
+      this.$.balloon.classList.add('broke');
+      player.status = 'broke!';
       break;
     }
-    this.model = {player: this.player};
+    this.player = {};
+    this.player = player;
   }
 }
+
+// Maybe with babel Stage 0 and Class properties this will
+// be less ugly
+Player.prototype.is = 'ai-player';
+
+document.registerElement('ai-player', Polymer.Class(Player.prototype));

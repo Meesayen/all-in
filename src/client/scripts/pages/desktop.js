@@ -3,9 +3,7 @@
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-// import Lobby from '../desktop/lobby';
 import Players from '../desktop/players';
-import Table from '../desktop/table';
 import * as socket from '../core/decorators/socket'; // jshint ignore:line
 
 // >>>
@@ -13,22 +11,21 @@ import * as socket from '../core/decorators/socket'; // jshint ignore:line
 // <<<
 class DesktopClient {
   constructor() {
-    this._socket = io();
-
     this._root = document.body;
-    // this._lobby = new Lobby(this._socket);
+  }
+  run() {
+    this.socket = io();
+
     this._lobby = document.createElement('ai-lobby');
     this._lobby.socket = this._socket;
     this._player = new Players(this._socket);
-    this._table = new Table(this._socket);
+    this._table = document.createElement('ai-table');
+    this._table.socket = this._socket;
 
     this._gameArea = this._root.querySelector('.game-area');
     this._gameArea.appendChild(this._lobby);
     this._gameArea.appendChild(this._player.root);
-    this._gameArea.appendChild(this._table.root);
-  }
-  run() {
-    this.initializeSocketComm(this._socket);
+    this._gameArea.appendChild(this._table);
   }
 
   // >>>
@@ -38,13 +35,6 @@ class DesktopClient {
     this._lobby.remove();
     this._gameArea.dataset.state = 'table';
     this._table.show();
-  }
-
-  // >>>
-  @socket.eventHandler('game:draw-flop')
-  // <<<
-  _handleDrawFlop(card) {
-    console.log(card);
   }
 }
 

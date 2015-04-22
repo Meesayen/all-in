@@ -1,7 +1,6 @@
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-import Player from './player';
 import * as socket from '../core/decorators/socket'; // jshint ignore:line
 
 // >>>
@@ -9,12 +8,10 @@ import * as socket from '../core/decorators/socket'; // jshint ignore:line
 // <<<
 export default class Players {
   constructor(socket) {
-    this._socket = socket;
+    this.socket = socket;
     this._players = {};
     this._root = document.createElement('div');
     this._root.classList.add('players');
-
-    this.initializeSocketComm(socket);
   }
 
   get root() {
@@ -25,13 +22,11 @@ export default class Players {
   @socket.eventHandler('game:player-joined')
   // <<<
   _handlePlayerJoined(player) {
-    let balloon = new Player(player, this._socket);
-    let box = document.createElement('div');
-
-    box.classList.add('player-box');
-    box.appendChild(balloon.root);
+    let balloon = document.createElement('ai-player');
+    balloon.player = player;
+    balloon.socket = this._socket;
     this._players[player.id] = balloon;
-    this._root.appendChild(box);
+    this._root.appendChild(balloon);
   }
 
   // >>>
@@ -39,10 +34,7 @@ export default class Players {
   // <<<
   _handlePlayerLeft(player) {
     let balloon = this._players[player.id];
-    let box = balloon.root.parentNode;
-
-    balloon.remove();
-    this._root.removeChild(box);
+    balloon.destroy();
     delete this._players[player.id];
   }
 }

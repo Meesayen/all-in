@@ -17,10 +17,6 @@ block 'content'
 
   div#game-table
     div.cards
-      div#card-1.card
-        div.value
-      div#card-2.card
-        div.value
     div.buttons
       div.game-button.call CALL
       div.game-button.raise RAISE
@@ -29,4 +25,9 @@ block 'content'
       input#raise-slider(type='range', min=10, max=100, step=5, value=10)
 
 block 'footer'
-  script(src='/js/mobile.js')
+  div(style='display:none')
+    include ../assets/cards.svg
+  link(rel="import", href="/components/common/card.html")
+  script
+    | System.transpiler = 'babel';
+    | System.import('./js/pages/mobile');

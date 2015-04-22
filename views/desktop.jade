@@ -9,7 +9,13 @@ block 'content'
   div.footer
 
 block 'footer'
+  div(style='display:none')
+    include ../assets/cards.svg
   link(rel="import", href="/components/desktop/lobby.html")
-  //- script(src='/js/pages/desktop.js')
-  script(src='/js/main.js')
-    
+  link(rel="import", href="/components/desktop/player.html")
+  link(rel="import", href="/components/desktop/table.html")
+  link(rel="import", href="/components/common/card.html")
+  script
+    | System.transpiler = 'babel';
+    | System.import('./js/pages/desktop');
+  

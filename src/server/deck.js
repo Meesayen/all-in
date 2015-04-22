@@ -1,10 +1,10 @@
 import { EventEmitter } from 'events';
 
 const SEEDS = [
-  'hearts',
-  'diamonds',
-  'spades',
-  'clubs'
+  'H',
+  'D',
+  'S',
+  'C'
 ];
 
 const VALUES = [

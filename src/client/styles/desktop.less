@@ -62,7 +62,7 @@ a {
   left: 0;
   bottom: 80px;
 
-  .player-box {
+  ai-player {
     display: flex;
     flex: 1;
     justify-content: center;
@@ -118,16 +118,16 @@ a {
       }
     }
 
-    &.player1 .status {
+    &[player-id="player1"] .status {
       background: #f36f62;
     }
-    &.player2 .status {
+    &[player-id="player2"] .status {
       background: #fbbe63;
     }
-    &.player3 .status {
+    &[player-id="player3"] .status {
       background: #7ec255;
     }
-    &.player4 .status {
+    &[player-id="player4"] .status {
       background: #40afc3;
     }
     &.thinking {
@@ -164,22 +164,22 @@ a {
     }
   }
 
-  .player1 {
+  [player-id="player1"] {
     background: #F6897E;
     box-shadow: inset 0 4px #BD5B52;
     border: 2px solid #BD5B52;
   }
-  .player2 {
+  [player-id="player2"] {
     background: #F7D080;
     box-shadow: inset 0 4px #AF7814;
     border: 2px solid #AF7814;
   }
-  .player3 {
+  [player-id="player3"] {
     background: #9BD578;
     box-shadow: inset 0 4px #456E2D;
     border: 2px solid #456E2D;
   }
-  .player4 {
+  [player-id="player4"] {
     background: #7AC4D1;
     box-shadow: inset 0 4px #227180;
     border: 2px solid #227180;

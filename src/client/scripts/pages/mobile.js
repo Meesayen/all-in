@@ -10,13 +10,13 @@ import * as socket from '../core/decorators/socket'; // jshint ignore:line
 // <<<
 class MobileClient {
   constructor() {
-    this._socket = io();
     this.nickname = null;
     this.balance = null;
     this.token = null;
   }
   init() {
     let doc = document;
+    this.socket = io();
     this.page = doc.querySelector('.page');
     this.page.style.height = window.screen.height + 'px';
     this.btnNext = doc.querySelector('.button.next');
@@ -27,7 +27,6 @@ class MobileClient {
     this.tokenInput = doc.querySelector('.token');
     this.nicknameInput = doc.querySelector('.player-info[name="nickname"]');
 
-    this.cards = [].slice.apply(doc.querySelectorAll('.card'));
     this.callBtn = doc.querySelector('.call');
     this.raiseBtn = doc.querySelector('.raise');
     this.foldBtn = doc.querySelector('.fold');
@@ -36,7 +35,6 @@ class MobileClient {
 
     this.notice = doc.querySelector('.notice');
     this._addCallbacks();
-    this.initializeSocketComm(this._socket);
   }
 
   _addCallbacks() {
@@ -48,7 +46,7 @@ class MobileClient {
   }
 
   _onNext() {
-    var phase = this.page.dataset.phase;
+    let phase = this.page.dataset.phase;
     if (phase === 'token-request') {
       this._sendToken();
     } else if (phase === 'info-update') {
@@ -137,10 +135,10 @@ class MobileClient {
   @socket.eventHandler('player:new-card')
   // <<<
   _handleNewCard(card) {
-    console.log(card);
-    let cardEl = this.cards.shift();
-    cardEl.dataset.seed = card.seed;
-    cardEl.querySelector('.value').textContent = card.value;
+    let cardEl = document.createElement('ai-card');
+    cardEl.value = card.value;
+    cardEl.suit = card.seed;
+    document.querySelector('.cards').appendChild(cardEl);
   }
 
   // >>>
