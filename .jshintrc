@@ -17,6 +17,8 @@
     "afterEach",
     "expect",
     "it",
+    "Polymer",
+    "io",
     "wrapGenerator"
   ],
   "debug": true,

@@ -1,5 +1,3 @@
-/* global Polymer */
-
 class Card {
   created() {
     this.vw = 223.23;

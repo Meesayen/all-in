@@ -1,5 +1,3 @@
-/* global Polymer */
-
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
