@@ -26,6 +26,7 @@
   "strict": false,
   "globalstrict": false,
   "esnext": true,
+  "maxlen": 120,
   "asi": false,
   "laxbreak": false,
   "bitwise": false,
