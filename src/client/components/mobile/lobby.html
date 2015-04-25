@@ -1,0 +1,29 @@
+<dom-module id="ai-mobile-lobby">
+  <template>
+    <div id="lobby">
+      <div id="notice" class="notice">{{notice}}</div>
+      <div id="page" class="page">
+        <div class="game-title"></div>
+        <input class="token"
+            type="text"
+            placeholder="token..."
+            maxlength="5"
+            on-keypress="_onInputKeypress"
+            value="{{token::input}}"/>
+        <div class="label">Nickname</div>
+        <input class="player-info"
+            type="text"
+            placeholder="nickname..."
+            maxlength="8"
+            on-keypress="_onInputKeypress"
+            on-keyup="_onUpdate"
+            value="{{nickname::input}}"/>
+        <div id="next" class="button next">SEND</div>
+        <span class="waiting-msg">
+          Wait for the game to start...
+        </span>
+      </div>
+    </div>
+  </template>
+</dom-module>
+<script>System.import('./components/mobile/lobby')</script>
