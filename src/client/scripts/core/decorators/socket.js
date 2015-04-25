@@ -22,7 +22,7 @@ export function communicator(target) {
   });
   Object.defineProperty(target.prototype, 'detached', {
     value: function() {
-      console.log('TODO: remove every socket connection')
+      console.log('TODO: remove every socket connection');
       detachedFn.apply(this, arguments);
     }
   });
