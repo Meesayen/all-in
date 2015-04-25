@@ -4,30 +4,14 @@ block 'head'
   link(rel='stylesheet', href='/css/mobile.css')
 
 block 'content'
-  div#lobby
-    div.notice
-    div.page(data-phase='token-request')
-      div.game-title
-      input.token(type='text', placeholder='token...', maxlength='5')
-      div.label Nickname
-      input.player-info(type='text', maxlength='8', name='nickname')
-      div.button.next SEND
-
-      span.waiting-msg Wait for the game to start...
-
-  div#game-table
-    div.cards
-    div.buttons
-      div.game-button.call CALL
-      div.game-button.raise RAISE
-      div.game-button.fold FOLD
-    div.raise-slider-box
-      input#raise-slider(type='range', min=10, max=100, step=5, value=10)
+  div.app
 
 block 'footer'
   div(style='display:none')
     include ../assets/cards.svg
   link(rel="import", href="/components/common/card.html")
+  link(rel="import", href="/components/mobile/lobby.html")
+  link(rel="import", href="/components/mobile/table.html")
   script
     | System.transpiler = 'babel';
     | System.import('./js/pages/mobile');

@@ -1,6 +1,7 @@
 let map = new WeakMap();
 export function communicator(target) {
   let listenersMap = map.get(target);
+  let detachedFn = target.prototype.detached || function() {};
   Object.defineProperty(target.prototype, '_initializeSocketComm', {
     value: function(socket) {
       if (listenersMap) {
@@ -17,6 +18,12 @@ export function communicator(target) {
     },
     get: function() {
       return this._socket;
+    }
+  });
+  Object.defineProperty(target.prototype, 'detached', {
+    value: function() {
+      console.log('TODO: remove every socket connection');
+      detachedFn.apply(this, arguments);
     }
   });
 }
