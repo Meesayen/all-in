@@ -2,10 +2,6 @@ class ActionPad {
   constructor() {
   }
 
-  ready() {
-    // this.classList.add('hidden');
-  }
-
   onHandleClick(e) {
     e.target.classList.toggle('triggered');
   }
