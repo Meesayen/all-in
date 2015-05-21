@@ -18,18 +18,23 @@ class Table {
     this.classList.remove('hidden');
   }
 
-  _onCheck() {
-    this.socket.emit('player:check');
-  }
-  _onCall() {
-    this.socket.emit('player:call');
-  }
-  _onRaise() {
-    let amount = this.raiseSlider.value;
-    this.socket.emit('player:raise', { amount });
-  }
-  _onFold() {
-    this.socket.emit('player:fold');
+  onAction(e) {
+    switch (e.detail.type) {
+      case 'check':
+        this.socket.emit('player:check');
+        break;
+      case 'call':
+        this.socket.emit('player:call');
+        break;
+      case 'raise':
+        this.socket.emit('player:raise', { amount: e.detail.amount});
+        break;
+      case 'fold':
+        this.socket.emit('player:fold');
+        break;
+      default:
+
+    }
   }
 
   // >>>
@@ -47,14 +52,15 @@ class Table {
   @socket.eventHandler('player:ack-bet')
   // <<<
   _handleWaitToBet() {
-    this.$.buttons.classList.add('disabled');
+    this.$.actionPad.classList.add('disabled');
   }
 
   // >>>
   @socket.eventHandler('player:my-turn')
   // <<<
-  _handleMyTurn() {
-    this.$.buttons.classList.remove('disabled');
+  _handleMyTurn(player) {
+    this.playerState = player.state;
+    this.$.actionPad.classList.remove('disabled');
   }
 }
 

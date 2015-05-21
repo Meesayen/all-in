@@ -241,6 +241,11 @@ export default class Game extends EventEmitter {
     this.tableInfo.amount += smallBlinder.doSmallBlind();
     this.tableInfo.amount += bigBlinder.doBigBlind();
     onTheShot.setState(PLAYER_STATES.THINKING);
+    this.table.players
+      .filter(player => player !== onTheShot)
+      .forEach(player => {
+        player.setState(PLAYER_STATES.WAITING);
+      });
     this.socket.emit('player:thinking', {id: onTheShot.id});
   }
 

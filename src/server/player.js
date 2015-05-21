@@ -21,6 +21,7 @@ export default class Player extends EventEmitter {
     this.socket = o.socket;
     this.table = o.table;
     this.state = STATES.LOBBY;
+    this.isBigBlinder = false;
     this.ready = false;
     this.cards = [];
 
@@ -55,12 +56,16 @@ export default class Player extends EventEmitter {
       this.socket.emit('player:wait-to-bet');
       break;
     case STATES.THINKING:
-      this.socket.emit('player:my-turn');
+      this.socket.emit('player:my-turn', {
+        state: this.isBigBlinder ? 'check' : 'call'
+      });
+      this.isBigBlinder = false;
       break;
     case STATES.SMALL_BLIND:
       this.socket.emit('player:my-turn', {state: 'small-blind'});
       break;
     case STATES.BIG_BLIND:
+      this.isBigBlinder = true;
       this.socket.emit('player:my-turn', {state: 'big-blind'});
       break;
     case STATES.BET_DONE:
@@ -114,7 +119,7 @@ export default class Player extends EventEmitter {
     let info = this.info;
     this.balance -= bet;
     info.bet = bet;
-    this.state = STATES.SMALL_BLIND;
+    this.setState(STATES.SMALL_BLIND);
     this.emit('update', info);
     return bet;
   }
@@ -123,7 +128,7 @@ export default class Player extends EventEmitter {
     let info = this.info;
     this.balance -= bet;
     info.bet = bet;
-    this.state = STATES.BIG_BLIND;
+    this.setState(STATES.BIG_BLIND);
     this.emit('update', info);
     return bet;
   }
