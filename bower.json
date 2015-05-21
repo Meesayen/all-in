@@ -15,7 +15,8 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.8.0-rc.2",
-    "systemjs": "systemjs/systemjs#~0.16.7"
+    "polymer": "Polymer/polymer#^0.9.0",
+    "systemjs": "systemjs/systemjs#~0.16.7",
+    "es6-module-loader": "~0.16.6"
   }
 }
