@@ -1,4 +1,4 @@
-let map = new WeakMap();
+let map;
 export function communicator(target) {
   let listenersMap = map.get(target);
   let detachedFn = target.prototype.detached || function() {};
@@ -28,6 +28,9 @@ export function communicator(target) {
   });
 }
 export function eventHandler(id) {
+  if (!map) {
+    map = new WeakMap();
+  }
   return function(target, name /*, descriptor*/) {
     if (!map.get(target.constructor)) {
       map.set(target.constructor, {});
@@ -36,6 +39,9 @@ export function eventHandler(id) {
   };
 }
 export function eventFilter(id) {
+  if (!map) {
+    map = new WeakMap();
+  }
   return function(target, name, descriptor) {
     let fn = descriptor.value;
     descriptor.value = function(data) {

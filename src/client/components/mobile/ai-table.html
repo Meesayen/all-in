@@ -1,0 +1,18 @@
+<link rel="import" href="../common/ai-card.html">
+
+<template>
+  <div id="cards" class="cards"></div>
+  <div id="buttons" class="buttons">
+    <div on-click="_onCall" class="game-button call">CALL</div>
+    <div on-click="_onRaise" class="game-button raise">RAISE</div>
+    <div on-click="_onFold" class="game-button fold">FOLD</div>
+  </div>
+  <div class="raise-slider-box">
+    <input id="raise-slider"
+        type="range"
+        min=10
+        max=100
+        step=5
+        value="10">
+  </div>
+</template>

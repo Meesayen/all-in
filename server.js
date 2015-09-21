@@ -13,7 +13,7 @@ module.exports = {
 };
 
 // serve static files
-app.use(express.static('public/'));
+app.use(express.static('dist/'));
 
 app.set('view engine', 'jade');
 

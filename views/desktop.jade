@@ -1,21 +1,18 @@
 extends layout
 
 block 'head'
-  link(rel='stylesheet', href='/css/desktop.css')
+  link(rel='stylesheet', href='/styles/desktop.css')
+  link(rel="import", href="/components/desktop/ai-app.html", async)
 
 block 'content'
-  div.game-area(data-state='lobby')
-    div.game-title
+  ai-app
+    div.game-area(data-state='lobby')
+      div.game-title
+      ai-lobby
+      ai-roster
+      ai-table
   div.footer
 
 block 'footer'
   div(style='display:none')
-    include ../assets/cards.svg
-  link(rel="import", href="/components/desktop/lobby.html")
-  link(rel="import", href="/components/desktop/player.html")
-  link(rel="import", href="/components/desktop/table.html")
-  link(rel="import", href="/components/common/card.html")
-  script
-    | System.transpiler = 'babel';
-    | System.import('./js/pages/desktop');
-  
+    include ../src/client/resources/cards.svg

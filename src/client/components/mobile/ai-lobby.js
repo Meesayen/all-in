@@ -1,19 +1,30 @@
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-import * as socket from '../../js/core/decorators/socket'; // jshint ignore:line
+import {communicator, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
 
-const STATES = {
+const MOBILE_STATES = {
   LANDING: 'landing',
   PLAYER_INFO: 'player-info',
   PLAYER_READY: 'player-ready'
 };
 
 // >>>
-@socket.communicator
+@communicator
 // <<<
-class Lobby {
-  constructor() {
+class MobileLobby {
+  beforeRegister() {
+    this.is = 'ai-lobby';
+    this.properties = {
+      state: {
+        type: String,
+        reflectToAttribute: true
+      },
+      playerId: {
+        type: String,
+        reflectToAttribute: true
+      }
+    };
   }
 
   created() {
@@ -22,7 +33,7 @@ class Lobby {
   ready() {
     this.token = '';
     this.nickname = '';
-    this.state = STATES.LANDING;
+    this.state = MOBILE_STATES.LANDING;
 
     this._onNextClick = this._onNextHandler.bind(this);
     this.$.next.addEventListener('click', this._onNextClick);
@@ -35,9 +46,9 @@ class Lobby {
 
   _onNextHandler() {
     let state = this.state;
-    if (state === STATES.LANDING) {
+    if (state === MOBILE_STATES.LANDING) {
       this._sendToken();
-    } else if (state === STATES.PLAYER_INFO) {
+    } else if (state === MOBILE_STATES.PLAYER_INFO) {
       this._sendReady();
     }
   }
@@ -76,7 +87,7 @@ class Lobby {
   }
 
   // >>>
-  @socket.eventHandler('game:connected')
+  @eventHandler('game:connected')
   // <<<
   _handleConnection(player) {
     this.nickname = player.nickname;
@@ -84,12 +95,12 @@ class Lobby {
     this.playerId = player.id;
     this.$.next.classList.remove('loading');
 
-    this.state = STATES.PLAYER_INFO;
+    this.state = MOBILE_STATES.PLAYER_INFO;
     this.$.next.textContent = 'READY';
   }
 
   // >>>
-  @socket.eventHandler('game:wrongtoken')
+  @eventHandler('game:wrongtoken')
   // <<<
   _handleWrongToken(data) {
     this.token = '';
@@ -97,32 +108,19 @@ class Lobby {
   }
 
   // >>>
-  @socket.eventHandler('game:lobbyfull')
+  @eventHandler('game:lobbyfull')
   // <<<
   _handleFullLobby(data) {
     this.showNotice(data.message);
   }
 
   // >>>
-  @socket.eventHandler('player:ack-ready')
+  @eventHandler('player:ack-ready')
   // <<<
   _handleAckReady() {
-    this.state = STATES.PLAYER_READY;
+    this.state = MOBILE_STATES.PLAYER_READY;
   }
 }
 
-// Maybe with babel Stage 0 and Class properties this will
-// be less ugly
-Lobby.prototype.is = 'ai-mobile-lobby';
-Lobby.prototype.properties = {
-  state: {
-    type: String,
-    reflectToAttribute: true
-  },
-  playerId: {
-    type: String,
-    reflectToAttribute: true
-  }
-};
-
-document.registerElement('ai-mobile-lobby', Polymer.Class(Lobby.prototype));
+/* jshint -W064 */
+Polymer(MobileLobby);

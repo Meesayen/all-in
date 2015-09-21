@@ -1,178 +1,73 @@
-/* jshint -W079 */
+require('babel/register');
+
 var
   gulp = require('gulp'),
-  gladius = require('gladius-forge'),
+  run = require('run-sequence'),
   server = require('./server').http;
 
+gulp.$ = require('gulp-load-plugins')();
 
-/**
- * Here you can configure the gulp build system with custom folders, different
- * build modules, etc.
- * ------------------------------------------------------------------------- */
-gladius.config(gulp, {
-  modules: {
-    // module to use to preprocess your stylesheets. default: less
-    // possible values: less, sass, sassCompass, stylus, myth.
-    styles: 'less',
-    // module to use to preprocess your stylesheets. default: handlebars
-    // possible values: handlebars, jade, dust, dot.
-    templates: 'jade'
-  },
+
+// require('./lib/gulp/bundle')(gulp, {
+//   paths: {
+//     js: {
+//       mobile: [
+//         'src/client/lib/**/*.js',
+//         'src/client/scripts/pages/mobile.js'
+//       ],
+//       desktop: [
+//         'src/client/scripts/desktop/**/*.js',
+//         'src/client/scripts/pages/desktop.js'
+//       ],
+//       lib: [
+//         'src/client/lib/**/*.js'
+//       ]
+//     },
+//     css: 'src/client/styles/**/*.less',
+//     components: 'src/client/components/!(lib)'
+//   }
+// });
+
+require('./lib/gulp/copy')(gulp, {});
+require('./lib/gulp/compile')(gulp, {
   paths: {
-    src: {
-      // folder home of your source files (less, js, etc). default: src/
-      base: 'src/',
-
-      // styles sources folder. default: styles/
-      styles: 'client/styles/',
-
-      // scripts folder. default: scripts/
-      scripts: 'client/scripts/',
-
-      // file extension for es6+ scripts. default: .es6
-      esnextExtension: '.js',
-
-      // templates and partials folder: default: ../views/, partials/
-      templates: '../views/',
-      partials: 'partials/'
-    },
-
-    out: {
-      // folder destination for built bundles. default: public/
-      base: 'public/',
-
-      // production ready styles folder. default: css/
-      styles: 'css/',
-
-      // production ready scripts folder. default: js/
-      scripts: 'js/'
-    }
-  },
-  // if the gulpfile is located in a different folder to the one which contains
-  // your scripts, a force clean is required, to wipe the temp folder.
-  forceClean: false,
-  // express web server to use while developing.
-  // port default: 3000
-  // liveReloadPort default: 35729
-  server: server,
-  port: 3000,
-  liveReloadPort: null
-});
-
-
-
-
-/**
- * Here you can hook extra tasks as dependency for predefined tasks (insert
- * a leading '!' to remove dependencies) or add additional sources (insert a
- * leading '!' to the path to delcare sources which should be ignored).
- * ------------------------------------------------------------------------- */
-gladius.setupTasks({
-  'bundle-js': {
-    deps: ['copy:components'],
-    src: []
-  },
-  'bundle-js:dev': {
-    deps: ['copy:components', '!lint', '!babelify'],
-    src: []
-  },
-  'lint': {
-    deps: [],
-    src: [
-      '!src/client/scripts/vendor/**/*',
-      '!src/client/scripts/mock/lib/**/*',
-    ]
+    js: ['src/client/**/*.js'],
+    css: ['src/client/**/*.less'],
+    html: ['src/client/**/*.html']
   }
 });
 
-
-/**
- * Add extra gulp tasks below
- * ------------------------------------------------------------------------- */
-var $ = gladius.getPlugins();
-
-// TODO: better bundling. System.js module?
-gulp.task('copy:components:js', function() {
-  return gulp.src([
-    'src/client/components/**/*.js'
-  ])
-  .pipe($.jshint({
-    lookup: true
-  }))
-  .pipe($.babel({
-    modules: 'system'
-  }))
-  .pipe(gulp.dest('public/components'));
-});
-gulp.task('copy:components', ['copy:components:js'], function() {
-  return gulp.src([
-    'src/client/components/**/*',
-    '!src/client/components/**/*.js'
-  ])
-  .pipe(gulp.dest('public/components'));
+gulp.task('watch', ['serve'], function() {
+  gulp.watch('src/client/**/*.js', ['compile:js']);
+  gulp.watch('src/client/**/*.less', ['compile:css']);
+  gulp.watch('src/client/**/*.html', ['compile:html']);
 });
 
-gulp.task('copy:assets', function() {
-  return gulp.src([
-    'assets/**/*'
-  ])
-  .pipe(gulp.dest('public'));
+gulp.task('serve', function() {
+  server.listen(3000, function() {
+    console.log('Express server listening on port ' +
+        3000);
+  });
 });
 
-gulp.task('babelify', ['copy'], function () {
-  return gulp.src([
-    'src/client/scripts/**/*.js'
-  ])
-  .pipe($.babel({
-    modules: 'system'
-  }))
-  // .on('error', handleError)
-  // .pipe($.jsvalidate())
-  // .on('error', handleError)
-  .pipe(gulp.dest('src/temp/'));
-});
-
-gulp.task('bundle-js:dev', ['babelify', 'copy:components'], function() {
-  return gulp.src([
-    'src/temp/**/*.js',
-    '!src/temp/**/*.test.js',
-  ])
-  // .pipe($.uglify())
-  .pipe(gulp.dest('public/js'));
-});
-
-
-/**
- * Add extra gulp watchers below
- * ------------------------------------------------------------------------- */
-
-// override
-gulp.task('watch', ['serve'], function () {
-  gulp.watch('src/client/scripts/**/*.js', ['bundle-js:dev:clean']);
-  gulp.watch('src/client/styles/**/*', ['styles']);
-  gulp.watch('src/views/partials/**/*', ['tpl-reload']);
-  gulp.watch('src/client/components/**/*', ['copy:components']);
-});
-
-
-
-/**
- * Here you can inject extra tasks into the main tasks. Those will be appendend
- * and concurrently run with other tasks.
- * ------------------------------------------------------------------------- */
-gladius.setupMain({
-  'development': [
-  ],
-  'test': [],
-  'production': [
-    'copy:assets'
-  ]
-});
-
-gulp.task('post-install-development', [
-  'styles',
-  'bundle-js:dev:clean',
-  'copy:assets',
-  'tpl-precompile',
-  'watch'
+gulp.task('bundle:js', [
+  'bundle:lib:js',
+  'bundle:mobile:js',
+  'bundle:desktop:js',
+  'bundle:components:js'
 ]);
+
+gulp.task('compile:all', [
+  'compile:js',
+  'compile:css',
+  'compile:html'
+]);
+
+gulp.task('dev', function(cb) {
+  run(
+    'compile:all',
+    ['copy:babel', 'copy:es6ml', 'copy:resources'],
+    'watch',
+    cb
+  );
+});
