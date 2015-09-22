@@ -4,5 +4,5 @@ var server = require('../server');
 server.app.set('port', process.env.PORT || 3000);
 
 server.http.listen(server.app.get('port'), function() {
-  console.log('Express server listening on port ' + server.http.address().port);
+  console.log('Express server listening on port ' + server.app.get('port'));
 });

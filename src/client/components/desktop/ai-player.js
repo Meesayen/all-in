@@ -1,7 +1,7 @@
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-import * as socket from '../../js/core/decorators/socket'; // jshint ignore:line
+import {communicator, eventFilter, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
 
 const PLAYER_STATES = {
   IDLE: 0,
@@ -18,10 +18,11 @@ const PLAYER_STATES = {
 };
 
 // >>>
-@socket.communicator
+@communicator
 // <<<
 class Player {
-  constructor() {
+  beforeRegister() {
+    this.is = 'ai-player';
   }
 
   ready() {
@@ -71,15 +72,15 @@ class Player {
   }
 
   // >>>
-  @socket.eventHandler('game:start')
+  @eventHandler('game:start')
   // <<<
   _onGameStart() {
     this.$.balloon.classList.remove('float');
   }
 
   // >>>
-  @socket.eventHandler('player:info-update')
-  @socket.eventFilter('id')
+  @eventHandler('player:info-update')
+  @eventFilter('id')
   // <<<
   _onInfoUpdate(player) {
     switch (player.state) {
@@ -105,24 +106,24 @@ class Player {
   }
 
   // >>>
-  @socket.eventHandler('player:ready')
-  @socket.eventFilter('id')
+  @eventHandler('player:ready')
+  @eventFilter('id')
   // <<<
   _onReady() {
     this.state = PLAYER_STATES.READY;
   }
 
   // >>>
-  @socket.eventHandler('player:check')
-  @socket.eventFilter('id')
+  @eventHandler('player:check')
+  @eventFilter('id')
   // <<<
   _onCheck() {
     this.state = PLAYER_STATES.CHECK;
   }
 
   // >>>
-  @socket.eventHandler('player:call')
-  @socket.eventFilter('id')
+  @eventHandler('player:call')
+  @eventFilter('id')
   // <<<
   _onCall() {
     console.log('onCall');
@@ -130,32 +131,32 @@ class Player {
   }
 
   // >>>
-  @socket.eventHandler('player:raise')
-  @socket.eventFilter('id')
+  @eventHandler('player:raise')
+  @eventFilter('id')
   // <<<
   _onRaise() {
     this.state = PLAYER_STATES.RAISE;
   }
 
   // >>>
-  @socket.eventHandler('player:fold')
-  @socket.eventFilter('id')
+  @eventHandler('player:fold')
+  @eventFilter('id')
   // <<<
   _onFold() {
     this.state = PLAYER_STATES.FOLD;
   }
 
   // >>>
-  @socket.eventHandler('player:waiting')
-  @socket.eventFilter('id')
+  @eventHandler('player:waiting')
+  @eventFilter('id')
   // <<<
   _onWaiting() {
     this.state = PLAYER_STATES.WAITING;
   }
 
   // >>>
-  @socket.eventHandler('player:thinking')
-  @socket.eventFilter('id')
+  @eventHandler('player:thinking')
+  @eventFilter('id')
   // <<<
   _onThinking() {
     this.state = PLAYER_STATES.THINKING;
@@ -203,8 +204,5 @@ class Player {
   }
 }
 
-// Maybe with babel Stage 0 and Class properties this will
-// be less ugly
-Player.prototype.is = 'ai-player';
-
-document.registerElement('ai-player', Polymer.Class(Player.prototype));
+/* jshint -W064 */
+Polymer(Player);

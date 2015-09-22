@@ -1,4 +1,12 @@
 class Card {
+  beforeRegister() {
+    this.is = 'ai-card';
+    this.properties = {
+      value: String,
+      suit: String
+    };
+  }
+
   created() {
     this.vw = 223.23;
     this.vh = 311.81;
@@ -47,12 +55,5 @@ class Card {
   }
 }
 
-// Maybe with babel Stage 0 and Class properties this will
-// be less ugly
-Card.prototype.is = 'ai-card';
-Card.prototype.properties = {
-  value: String,
-  suit: String
-};
-
-document.registerElement('ai-card', Polymer.Class(Card.prototype));
+/* jshint -W064 */
+Polymer(Card);

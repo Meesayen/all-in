@@ -1,13 +1,14 @@
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-import * as socket from '../../js/core/decorators/socket'; // jshint ignore:line
+import {communicator, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
 
 // >>>
-@socket.communicator
+@communicator
 // <<<
 class Table {
-  constructor() {
+  beforeRegister() {
+    this.is = 'ai-table';
   }
 
   ready() {
@@ -19,7 +20,7 @@ class Table {
   }
 
   // >>>
-  @socket.eventHandler('game:draw-flop')
+  @eventHandler('game:draw-flop')
   // <<<
   _handleDrawFlop(flopCards) {
     flopCards.map(card => {
@@ -33,9 +34,5 @@ class Table {
   }
 }
 
-
-// Maybe with babel Stage 0 and Class properties this will
-// be less ugly
-Table.prototype.is = 'ai-table';
-
-document.registerElement('ai-table', Polymer.Class(Table.prototype));
+/* jshint -W064 */
+Polymer(Table);

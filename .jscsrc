@@ -76,5 +76,7 @@
   "safeContextKeyword": "_this",
 
   "excludeFiles": [
+    "dist/**",
+    "*.min.js"
   ]
 }

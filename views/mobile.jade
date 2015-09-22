@@ -1,17 +1,15 @@
 extends layout
 
 block 'head'
-  link(rel='stylesheet', href='/css/mobile.css')
+  link(rel='stylesheet', href='/styles/mobile.css')
+  link(rel="import", href="/components/mobile/ai-app.html", async)  
 
 block 'content'
-  div.app
+  ai-app
+    div.app
+      ai-lobby
+      ai-table
 
 block 'footer'
   div(style='display:none')
-    include ../assets/cards.svg
-  link(rel="import", href="/components/common/card.html")
-  link(rel="import", href="/components/mobile/lobby.html")
-  link(rel="import", href="/components/mobile/table.html")
-  script
-    | System.transpiler = 'babel';
-    | System.import('./js/pages/mobile');
+    include ../src/client/resources/cards.svg

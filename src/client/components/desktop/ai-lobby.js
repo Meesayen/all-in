@@ -1,7 +1,7 @@
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-import * as socket from '../../js/core/decorators/socket'; // jshint ignore:line
+import {communicator, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
 
 const STATES = {
   LANDING: 'landing',
@@ -10,10 +10,17 @@ const STATES = {
 };
 
 // >>>
-@socket.communicator
+@communicator
 // <<<
 class Lobby {
-  constructor() {
+  beforeRegister() {
+    this.is = 'ai-lobby';
+    this.properties = {
+      state: {
+        type: String,
+        reflectToAttribute: true
+      }
+    };
   }
 
   created() {
@@ -41,7 +48,7 @@ class Lobby {
       this._showToken();
     } else {
       this.$.nextBtn.classList.add('loading');
-      this._socket.emit('web:start');
+      this.socket.emit('web:start');
     }
   }
   _showInstructions() {
@@ -51,25 +58,25 @@ class Lobby {
     this.state = STATES.TOKEN;
     this.$.nextBtn.textContent = 'START';
     this.$.nextBtn.classList.add('disabled');
-    this._socket.emit('web:connection');
+    this.socket.emit('web:connection');
   }
 
   // >>>
-  @socket.eventHandler('game:tokenized')
+  @eventHandler('game:tokenized')
   // <<<
   _handleGameTokenReceived(data) {
     this.token = data.token;
   }
 
   // >>>
-  @socket.eventHandler('game:ready-to-play')
+  @eventHandler('game:ready-to-play')
   // <<<
   _handleReadyToPlay() {
     this.$.nextBtn.classList.remove('disabled');
   }
 
   // >>>
-  @socket.eventHandler('game:not-ready-to-play')
+  @eventHandler('game:not-ready-to-play')
   // <<<
   _handleNotReadyToPlay() {
     this.$.nextBtn.classList.add('disabled');
@@ -77,14 +84,5 @@ class Lobby {
 
 }
 
-// Maybe with babel Stage 0 and Class properties this will
-// be less ugly
-Lobby.prototype.is = 'ai-lobby';
-Lobby.prototype.properties = {
-  state: {
-    type: String,
-    reflectToAttribute: true
-  }
-};
-
-document.registerElement('ai-lobby', Polymer.Class(Lobby.prototype));
+/* jshint -W064 */
+Polymer(Lobby);
