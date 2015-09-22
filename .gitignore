@@ -25,7 +25,6 @@ build/Release
 node_modules
 
 dist/*
-lib/*
 
 src/temp/*
 src/client/components/lib/*

@@ -2,31 +2,11 @@ require('babel/register');
 
 var
   gulp = require('gulp'),
-  run = require('run-sequence'),
+  s = gulp.series.bind(gulp),
+  p = gulp.parallel.bind(gulp),
   server = require('./server').http;
 
 gulp.$ = require('gulp-load-plugins')();
-
-
-// require('./lib/gulp/bundle')(gulp, {
-//   paths: {
-//     js: {
-//       mobile: [
-//         'src/client/lib/**/*.js',
-//         'src/client/scripts/pages/mobile.js'
-//       ],
-//       desktop: [
-//         'src/client/scripts/desktop/**/*.js',
-//         'src/client/scripts/pages/desktop.js'
-//       ],
-//       lib: [
-//         'src/client/lib/**/*.js'
-//       ]
-//     },
-//     css: 'src/client/styles/**/*.less',
-//     components: 'src/client/components/!(lib)'
-//   }
-// });
 
 require('./lib/gulp/copy')(gulp, {});
 require('./lib/gulp/compile')(gulp, {
@@ -37,10 +17,11 @@ require('./lib/gulp/compile')(gulp, {
   }
 });
 
-gulp.task('watch', ['serve'], function() {
-  gulp.watch('src/client/**/*.js', ['compile:js']);
-  gulp.watch('src/client/**/*.less', ['compile:css']);
-  gulp.watch('src/client/**/*.html', ['compile:html']);
+gulp.task('watch', function() {
+  gulp.$.livereload.listen();
+  gulp.watch('src/client/**/*.js', p('compile:js'));
+  gulp.watch('src/client/**/*.less', p('compile:css'));
+  gulp.watch('src/client/**/*.html', p('compile:html'));
 });
 
 gulp.task('serve', function() {
@@ -50,24 +31,14 @@ gulp.task('serve', function() {
   });
 });
 
-gulp.task('bundle:js', [
-  'bundle:lib:js',
-  'bundle:mobile:js',
-  'bundle:desktop:js',
-  'bundle:components:js'
-]);
-
-gulp.task('compile:all', [
+gulp.task('compile:all', p(
   'compile:js',
   'compile:css',
   'compile:html'
-]);
+));
 
-gulp.task('dev', function(cb) {
-  run(
-    'compile:all',
-    ['copy:babel', 'copy:es6ml', 'copy:resources'],
-    'watch',
-    cb
-  );
-});
+gulp.task('dev', s(
+  'compile:all',
+  p('copy:babel', 'copy:es6ml', 'copy:resources'),
+  p('watch', 'serve')
+));
