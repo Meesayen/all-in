@@ -10,15 +10,23 @@ var
   p = gulp.parallel.bind(gulp),
   livereload = require('gulp-livereload'),
   server = require('./server').http,
-  paths = {
-    js: ['src/client/**/*.js'],
-    css: ['src/client/**/*.less'],
-    html: ['src/client/**/*.html'],
-    dist: 'dist/'
-  },
   compile = require('./lib/gulp/compile'),
   copy = require('./lib/gulp/copy');
 
+
+let paths = {
+  base: 'src/client/',
+  get js() {
+    return `${this.base}**/*.js`;
+  },
+  get css() {
+    return `${this.base}**/*.less`;
+  },
+  get html() {
+    return `${this.base}**/*.html`;
+  },
+  dist: 'dist/'
+};
 
 // Compilers
 let compileScripts = compile.scripts(paths.js, paths.dist);
