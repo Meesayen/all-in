@@ -1,44 +1,71 @@
-require('babel/register');
+'use strict';
+
+require('babel/register', {
+  only: 'es6.modules'
+});
 
 var
   gulp = require('gulp'),
   s = gulp.series.bind(gulp),
   p = gulp.parallel.bind(gulp),
-  server = require('./server').http;
-
-gulp.$ = require('gulp-load-plugins')();
-
-require('./lib/gulp/copy')(gulp, {});
-require('./lib/gulp/compile')(gulp, {
-  paths: {
+  livereload = require('gulp-livereload'),
+  server = require('./server').http,
+  paths = {
     js: ['src/client/**/*.js'],
     css: ['src/client/**/*.less'],
-    html: ['src/client/**/*.html']
-  }
-});
+    html: ['src/client/**/*.html'],
+    dist: 'dist/'
+  },
+  compile = require('./lib/gulp/compile'),
+  copy = require('./lib/gulp/copy');
 
-gulp.task('watch', function() {
-  gulp.$.livereload.listen();
-  gulp.watch('src/client/**/*.js', p('compile:js'));
-  gulp.watch('src/client/**/*.less', p('compile:css'));
-  gulp.watch('src/client/**/*.html', p('compile:html'));
-});
 
-gulp.task('serve', function() {
+// Compilers
+let compileScripts = compile.scripts(paths.js, paths.dist);
+let compileStyles = compile.styles(paths.css, paths.dist);
+let compileHtml = compile.html(paths.html, paths.dist);
+
+let compileAll = p(
+  compileScripts,
+  compileStyles,
+  compileHtml
+);
+
+// Copy tasks
+let copyAll = p(
+  copy.es6ml,
+  copy.babel,
+  copy.resources
+);
+
+// Awesome incremental rebuild
+function watch(done) {
+  var opts = {ignoreInitial: true};
+  livereload.listen();
+  gulp.watch('src/client/**/*.js', opts, compileScripts);
+  gulp.watch('src/client/**/*.less', opts, compileStyles);
+  gulp.watch('src/client/**/*.html', opts, compileHtml);
+  done();
+}
+
+// Server run
+function serve(done) {
   server.listen(3000, function() {
     console.log('Express server listening on port ' +
         3000);
   });
-});
+  done();
+}
 
-gulp.task('compile:all', p(
-  'compile:js',
-  'compile:css',
-  'compile:html'
+// Development task (default)
+gulp.task('default', s(
+  compileAll,
+  copyAll,
+  p(watch, serve)
 ));
 
-gulp.task('dev', s(
-  'compile:all',
-  p('copy:babel', 'copy:es6ml', 'copy:resources'),
-  p('watch', 'serve')
+// Production task
+gulp.task('production', s(
+  compileAll,
+  copyAll
 ));
