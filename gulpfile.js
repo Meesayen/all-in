@@ -1,7 +1,7 @@
 'use strict';
 
-require('babel/register', {
-  only: 'es6.modules'
+require('babel/register')({
+  whitelist: ['es6.modules', 'strict']
 });
 
 var
