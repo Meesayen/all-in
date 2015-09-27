@@ -33,7 +33,9 @@
   "devDependencies": {
     "babel-runtime": "^5.1.10",
     "babelify": "^6.0.0",
-    "gulp-livereload": "^3.8.0"
+    "gulp-git": "^1.4.0",
+    "gulp-livereload": "^3.8.0",
+    "gulp-util": "^3.0.6"
   },
   "subdomain": "",
   "engines": {

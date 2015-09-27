@@ -1,7 +1,3 @@
-require('babel/register')({
-  whitelist: ['es6.modules', 'strict']
-});
-
 var
   express = require('express'),
   app = express(),

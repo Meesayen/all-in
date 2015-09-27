@@ -1,7 +1,7 @@
 'use strict';
 
 require('babel/register')({
-  whitelist: ['es6.modules', 'strict']
+  whitelist: ['es6.modules', 'es6.destructuring', 'es6.parameters', 'strict']
 });
 
 var
@@ -11,6 +11,7 @@ var
   livereload = require('gulp-livereload'),
   server = require('./server').http,
   compile = require('./lib/gulp/compile'),
+  git = require('./lib/gulp/git'),
   copy = require('./lib/gulp/copy');
 
 
@@ -64,6 +65,8 @@ function serve(done) {
   });
   done();
 }
+
+gulp.task('push', git.pushBranch());
 
 // Development task (default)
 gulp.task('default', s(
