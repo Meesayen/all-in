@@ -66,7 +66,7 @@ function serve(done) {
   done();
 }
 
-gulp.task('push', git.pushBranch({master: 'development', remote: 'sf'}));
+gulp.task('push', git.pushBranch());
 
 // Development task (default)
 gulp.task('default', s(
