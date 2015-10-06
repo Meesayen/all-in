@@ -7,7 +7,7 @@ var doc = document;
  * @params {Object} obj
  * @return {String} A string representation of the Object passed in.
  */
-export var serialize = (obj) => JSON.stringify(obj || {});
+export let serialize = (obj) => JSON.stringify(obj || {});
 
 /**
  * Safe Object representation deserializer. It won't fail if undefined or null
@@ -17,7 +17,7 @@ export var serialize = (obj) => JSON.stringify(obj || {});
  * @params {String} str: Object representation string.
  * @return {Object} The deserialized Object.
  */
-export var deserialize = (str) => JSON.parse(str || '{}');
+export let deserialize = (str) => JSON.parse(str || '{}');
 
 /**
  * Simple deep object copy function.
@@ -25,7 +25,7 @@ export var deserialize = (str) => JSON.parse(str || '{}');
  * @params {Object} obj: The Object to be cloned.
  * @return {Object} Deep clone of the input Object.
  */
-export var clone = (obj) => deserialize(serialize(obj));
+export let clone = (obj) => deserialize(serialize(obj));
 
 /**
  * Object value lookup. It takes an Object and a String descriptive of the path
@@ -44,7 +44,7 @@ export var clone = (obj) => deserialize(serialize(obj));
  * @param  {String} key The string descriptive of the value path
  * @return {Value || undefined}
  */
-export var lookup = (data, key) => {
+export let lookup = (data, key) => {
   return key.split('.').reduce((obj, keyBit) => {
     if (typeof obj === 'object') {
       return obj[keyBit];
@@ -54,7 +54,7 @@ export var lookup = (data, key) => {
 };
 
 
-var run = (g, cb) => {
+let run = (g, cb) => {
   var
     it = g(),
     ret;
@@ -82,7 +82,7 @@ var run = (g, cb) => {
  * @param  {Generator} gen
  * @return {Promise}
  */
-export var async = (gen) => {
+export let async = (gen) => {
   return new Promise((resolve, reject) => {
     run(gen, (err, data) => {
       if (err) {
@@ -101,7 +101,7 @@ export var async = (gen) => {
  * @param  {String} text  Optional text content
  * @return {HTMLElement}
  */
-export var createElement = function(type, attrs={}, text=null) {
+export let createElement = function(type, attrs={}, text=null) {
   var el = doc.createElement(type);
   Object.keys(attrs).forEach(k => {
     if (el.hasOwnProperty(k) || k === 'class') {
@@ -125,14 +125,13 @@ export var createElement = function(type, attrs={}, text=null) {
 };
 
 
-
-export var toArray = (arrayLike) => {
+export let toArray = (arrayLike) => {
   var arr = [];
   try {
     arr = [].slice.call(arrayLike);
-  } catch(e) {
+  } catch (e) {
     // Thanks a lot IE 8. I mean it.
-    for (var i = 0; i < arrayLike.length; i++) {
+    for (let i = 0; i < arrayLike.length; i++) {
       arr.push(arrayLike[i]);
     }
   }

@@ -49,8 +49,6 @@ export default class Player extends EventEmitter {
     switch (state) {
     case STATES.LOBBY:
       break;
-    case STATES.IDLE:
-      break;
     case STATES.WAITING:
       this.socket.emit('player:wait-to-bet');
       break;
@@ -58,10 +56,10 @@ export default class Player extends EventEmitter {
       this.socket.emit('player:my-turn');
       break;
     case STATES.SMALL_BLIND:
-      this.socket.emit('player:my-turn', {state: 'small-blind'});
+      this.socket.emit('player:my-turn', { state: 'small-blind' });
       break;
     case STATES.BIG_BLIND:
-      this.socket.emit('player:my-turn', {state: 'big-blind'});
+      this.socket.emit('player:my-turn', { state: 'big-blind' });
       break;
     case STATES.BET_DONE:
       this.socket.emit('player:ack-bet');
@@ -69,6 +67,8 @@ export default class Player extends EventEmitter {
     case STATES.FOLDED:
       this.socket.emit('player:ack-fold');
       break;
+    case STATES.IDLE:
+    default:
     }
   }
   _handleDisconnect() {
@@ -150,7 +150,7 @@ export default class Player extends EventEmitter {
     this._changeState(STATES.BET_DONE);
     this.emit('raise', {
       id: this.id,
-      amount: amount
+      amount
     });
     this.balance -= amount;
     let info = this.info;
@@ -160,7 +160,7 @@ export default class Player extends EventEmitter {
   }
   _handleFold() {
     this._changeState(STATES.FOLDED);
-    this.emit('fold', {id: this.id});
+    this.emit('fold', { id: this.id });
     this.emit('update', this.info);
   }
   get info() {

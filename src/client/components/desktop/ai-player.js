@@ -1,7 +1,4 @@
-// TODO remove ugly >>> <<< comments as soon as decorators will behave
-// with jshint, or at least with its ignore:line directive
-
-import {communicator, eventFilter, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
+import { communicator, eventFilter, eventHandler } from 'lib/decorators/socket';
 
 const PLAYER_STATES = {
   IDLE: 0,
@@ -17,9 +14,7 @@ const PLAYER_STATES = {
   CHECK: 12
 };
 
-// >>>
 @communicator
-// <<<
 class Player {
   beforeRegister() {
     this.is = 'ai-player';
@@ -71,17 +66,13 @@ class Player {
     this.remove();
   }
 
-  // >>>
   @eventHandler('game:start')
-  // <<<
   _onGameStart() {
     this.$.balloon.classList.remove('float');
   }
 
-  // >>>
   @eventHandler('player:info-update')
   @eventFilter('id')
-  // <<<
   _onInfoUpdate(player) {
     switch (player.state) {
     case PLAYER_STATES.WAITING:
@@ -105,59 +96,45 @@ class Player {
     this.player = player;
   }
 
-  // >>>
   @eventHandler('player:ready')
   @eventFilter('id')
-  // <<<
   _onReady() {
     this.state = PLAYER_STATES.READY;
   }
 
-  // >>>
   @eventHandler('player:check')
   @eventFilter('id')
-  // <<<
   _onCheck() {
     this.state = PLAYER_STATES.CHECK;
   }
 
-  // >>>
   @eventHandler('player:call')
   @eventFilter('id')
-  // <<<
   _onCall() {
     console.log('onCall');
     this.state = PLAYER_STATES.CALL;
   }
 
-  // >>>
   @eventHandler('player:raise')
   @eventFilter('id')
-  // <<<
   _onRaise() {
     this.state = PLAYER_STATES.RAISE;
   }
 
-  // >>>
   @eventHandler('player:fold')
   @eventFilter('id')
-  // <<<
   _onFold() {
     this.state = PLAYER_STATES.FOLD;
   }
 
-  // >>>
   @eventHandler('player:waiting')
   @eventFilter('id')
-  // <<<
   _onWaiting() {
     this.state = PLAYER_STATES.WAITING;
   }
 
-  // >>>
   @eventHandler('player:thinking')
   @eventFilter('id')
-  // <<<
   _onThinking() {
     this.state = PLAYER_STATES.THINKING;
   }
@@ -167,6 +144,7 @@ class Player {
     this.$.balloon.classList.remove('fold');
     this.$.balloon.classList.remove('thinking');
     this.$.balloon.classList.remove('broke');
+
     switch (this._state) {
     case PLAYER_STATES.WAITING:
       player.status = 'waiting';
@@ -198,11 +176,12 @@ class Player {
       this.$.balloon.classList.add('broke');
       player.status = 'broke!';
       break;
+    default:
+      player.status = 'waiting';
     }
     this.player = {};
     this.player = player;
   }
 }
 
-/* jshint -W064 */
 Polymer(Player);

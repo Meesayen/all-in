@@ -1,11 +1,8 @@
-// TODO remove ugly >>> <<< comments as soon as decorators will behave
-// with jshint, or at least with its ignore:line directive
+/* global io */
 
-import {communicator, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
+import { communicator, eventHandler } from 'lib/decorators/socket';
 
-// >>>
 @communicator
-// <<<
 class MobileApp {
   beforeRegister() {
     this.is = 'ai-app';
@@ -31,14 +28,11 @@ class MobileApp {
     this.table.socket = this.socket;
   }
 
-  // >>>
   @eventHandler('game:start')
-  // <<<
   _handleGameStart() {
     this.lobby.remove();
     this.table.show();
   }
 }
 
-/* jshint -W064 */
 Polymer(MobileApp);

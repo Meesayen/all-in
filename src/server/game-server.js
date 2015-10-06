@@ -32,10 +32,10 @@ export default class GameServer extends EventEmitter {
 
   _handleDesktopConnection(socket) {
     let d = new Date();
-    let id = hashids.encode(parseInt('1' + d.getMinutes() + '' + d.getSeconds()));
+    let id = hashids.encode(parseInt(`1${d.getMinutes()}${d.getSeconds()}`, 10));
     let game = new Game(socket);
     this.games[id] = game;
-    socket.emit('game:tokenized', {token: id});
+    socket.emit('game:tokenized', { token: id });
   }
 
   _handleDeviceConnection(socket, data) {
@@ -44,15 +44,13 @@ export default class GameServer extends EventEmitter {
       socket.emit('game:wrongtoken', {
         message: 'Wrong Token'
       });
+    } else if (game.availableSeatsCount === 0) {
+      socket.emit('game:lobbyfull', {
+        message: 'The Lobby is currently full.' +
+          '<br>Only 4 players at once are allowed to join in.'
+      });
     } else {
-      if(game.availableSeatsCount === 0) {
-        socket.emit('game:lobbyfull', {
-          message: 'The Lobby is currently full.' +
-            '<br>Only 4 players at once are allowed to join in.'
-        });
-      } else {
-        game.addPlayer(socket);
-      }
+      game.addPlayer(socket);
     }
   }
 }

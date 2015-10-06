@@ -3,7 +3,7 @@ export function communicator(target) {
   let listenersMap = map.get(target);
   let detachedFn = target.prototype.detached || function() {};
   Object.defineProperty(target.prototype, '_initializeSocketComm', {
-    value: function(socket) {
+    value(socket) {
       if (listenersMap) {
         Object.keys(listenersMap).forEach(key => {
           socket.on(key, this[listenersMap[key]].bind(this));
@@ -12,16 +12,16 @@ export function communicator(target) {
     }
   });
   Object.defineProperty(target.prototype, 'socket', {
-    set: function(socket) {
+    set(socket) {
       this._socket = socket;
       this._initializeSocketComm(socket);
     },
-    get: function() {
+    get() {
       return this._socket;
     }
   });
   Object.defineProperty(target.prototype, 'detached', {
-    value: function() {
+    value() {
       console.log('TODO: remove every socket connection');
       detachedFn.apply(this, arguments);
     }

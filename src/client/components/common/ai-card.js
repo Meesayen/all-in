@@ -55,5 +55,4 @@ class Card {
   }
 }
 
-/* jshint -W064 */
 Polymer(Card);

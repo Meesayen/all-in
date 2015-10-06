@@ -1,17 +1,18 @@
 'use strict';
 
 require('babel/register')({
-  whitelist: ['es6.modules', 'strict']
+  whitelist: ['es6.modules', 'es6.destructuring', 'es6.parameters', 'strict']
 });
 
-var
-  gulp = require('gulp'),
-  s = gulp.series.bind(gulp),
-  p = gulp.parallel.bind(gulp),
-  livereload = require('gulp-livereload'),
-  server = require('./server').http,
-  compile = require('./lib/gulp/compile'),
-  copy = require('./lib/gulp/copy');
+
+let gulp = require('gulp');
+let s = gulp.series.bind(gulp);
+let p = gulp.parallel.bind(gulp);
+let livereload = require('gulp-livereload');
+let server = require('./server').http;
+let compile = require('./lib/gulp/compile');
+let git = require('./lib/gulp/git');
+let copy = require('./lib/gulp/copy');
 
 
 let paths = {
@@ -48,7 +49,7 @@ let copyAll = p(
 
 // Awesome incremental rebuild
 function watch(done) {
-  var opts = {ignoreInitial: true};
+  var opts = { ignoreInitial: true };
   livereload.listen();
   gulp.watch('src/client/**/*.js', opts, compileScripts);
   gulp.watch('src/client/**/*.less', opts, compileStyles);
@@ -58,12 +59,14 @@ function watch(done) {
 
 // Server run
 function serve(done) {
-  server.listen(3000, function() {
+  server.listen(3000, () => {
     console.log('Express server listening on port ' +
         3000);
   });
   done();
 }
+
+gulp.task('push', git.pushBranch());
 
 // Development task (default)
 gulp.task('default', s(
