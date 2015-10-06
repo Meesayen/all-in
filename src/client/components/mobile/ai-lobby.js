@@ -1,7 +1,4 @@
-// TODO remove ugly >>> <<< comments as soon as decorators will behave
-// with jshint, or at least with its ignore:line directive
-
-import {communicator, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
+import { communicator, eventHandler } from 'lib/decorators/socket';
 
 const MOBILE_STATES = {
   LANDING: 'landing',
@@ -9,9 +6,7 @@ const MOBILE_STATES = {
   PLAYER_READY: 'player-ready'
 };
 
-// >>>
 @communicator
-// <<<
 class MobileLobby {
   beforeRegister() {
     this.is = 'ai-lobby';
@@ -86,9 +81,7 @@ class MobileLobby {
     }, 4000);
   }
 
-  // >>>
   @eventHandler('game:connected')
-  // <<<
   _handleConnection(player) {
     this.nickname = player.nickname;
     this.balance = player.balance;
@@ -99,28 +92,21 @@ class MobileLobby {
     this.$.next.textContent = 'READY';
   }
 
-  // >>>
   @eventHandler('game:wrongtoken')
-  // <<<
   _handleWrongToken(data) {
     this.token = '';
     this.showNotice(data.message);
   }
 
-  // >>>
   @eventHandler('game:lobbyfull')
-  // <<<
   _handleFullLobby(data) {
     this.showNotice(data.message);
   }
 
-  // >>>
   @eventHandler('player:ack-ready')
-  // <<<
   _handleAckReady() {
     this.state = MOBILE_STATES.PLAYER_READY;
   }
 }
 
-/* jshint -W064 */
 Polymer(MobileLobby);

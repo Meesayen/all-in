@@ -62,11 +62,11 @@ export default class Game extends EventEmitter {
     let id = this._availableSeats.shift();
     this.playersInGame++;
 
-    if(id !== undefined) {
+    if (id !== undefined) {
       let player = new Player({
-        socket: socket,
-        id: id,
-        nickname: 'Player ' + (id.substr(-1)),
+        socket,
+        id,
+        nickname: `Player ${id.substr(-1)}`,
         balance: INITIAL_BALANCE,
         table: this.tableInfo
       });
@@ -97,9 +97,7 @@ export default class Game extends EventEmitter {
     this._availableSeats.unshift(id);
     this.players[id] = null;
 
-    this.socket.emit('game:player-left', {
-      id: id
-    });
+    this.socket.emit('game:player-left', { id });
   }
 
   get availableSeatsCount() {
@@ -155,8 +153,6 @@ export default class Game extends EventEmitter {
     case GAME_PHASES.READY_TO_PLAY:
       this.socket.emit('game:ready-to-play');
       break;
-    case GAME_PHASES.IDLE:
-      break;
     case GAME_PHASES.PRE_FLOP:
       this._manageBlinds();
       break;
@@ -171,6 +167,8 @@ export default class Game extends EventEmitter {
       break;
     case GAME_PHASES.RESULT:
       break;
+    case GAME_PHASES.IDLE:
+    default:
     }
   }
 
@@ -220,7 +218,7 @@ export default class Game extends EventEmitter {
         status: player.status
       });
 
-      this.socket.emit('player:waiting', {id: player.id});
+      this.socket.emit('player:waiting', { id: player.id });
     });
 
     this.table.dealer = 0;
@@ -241,7 +239,7 @@ export default class Game extends EventEmitter {
     this.tableInfo.amount += smallBlinder.doSmallBlind();
     this.tableInfo.amount += bigBlinder.doBigBlind();
     onTheShot.setState(PLAYER_STATES.THINKING);
-    this.socket.emit('player:thinking', {id: onTheShot.id});
+    this.socket.emit('player:thinking', { id: onTheShot.id });
   }
 
 
@@ -252,7 +250,7 @@ export default class Game extends EventEmitter {
   }
 
   _handlePlayerCheck(data) {
-    this.socket.emit('player:check', {id: data.id});
+    this.socket.emit('player:check', { id: data.id });
     if (this.state === GAME_PHASES.PRE_FLOP) {
       this._changePhase(GAME_PHASES.FLOP);
     } else {
@@ -261,41 +259,41 @@ export default class Game extends EventEmitter {
         this._nextPhase();
       } else {
         player.setState(PLAYER_STATES.THINKING);
-        this.socket.emit('player:thinking', {id: player.id});
+        this.socket.emit('player:thinking', { id: player.id });
       }
     }
   }
   _handlePlayerCall(data) {
-    this.socket.emit('player:call', {id: data.id});
+    this.socket.emit('player:call', { id: data.id });
     let player = this._nextPlayer();
     if (player.state === PLAYER_STATES.BET_DONE) {
       this._nextPhase();
     } else {
       player.setState(PLAYER_STATES.THINKING);
-      this.socket.emit('player:thinking', {id: player.id});
+      this.socket.emit('player:thinking', { id: player.id })
     }
   }
   _handlePlayerRaise(data) {
-    this.socket.emit('player:raise', {id: data.id, bet: data.bet});
+    this.socket.emit('player:raise', { id: data.id, bet: data.bet });
     let player = this._nextPlayer();
     if (player.state === PLAYER_STATES.BET_DONE) {
       this._nextPhase();
     } else {
       player.setState(PLAYER_STATES.THINKING);
-      this.socket.emit('player:thinking', {id: player.id});
+      this.socket.emit('player:thinking', { id: player.id });
     }
   }
 
   _handlePlayerAllIn(/*player*/) {}
 
   _handlePlayerFold(data) {
-    this.socket.emit('player:fold', {id: data.id});
+    this.socket.emit('player:fold', { id: data.id });
     let player = this._nextPlayer();
     if (player.state === PLAYER_STATES.BET_DONE) {
       this._nextPhase();
     } else {
       player.setState(PLAYER_STATES.THINKING);
-      this.socket.emit('player:thinking', {id: player.id});
+      this.socket.emit('player:thinking', { id: player.id });
     }
   }
 
@@ -318,13 +316,13 @@ export default class Game extends EventEmitter {
 
     this.table.players.forEach(player => {
       player.setState(PLAYER_STATES.WAITING);
-      this.socket.emit('player:waiting', {id: player.id});
+      this.socket.emit('player:waiting', { id: player.id });
     });
 
     this.table.dealer = 0;
     let player = this._nextPlayer();
     player.setState(PLAYER_STATES.THINKING);
-    this.socket.emit('player:thinking', {id: player.id});
+    this.socket.emit('player:thinking', { id: player.id });
   }
   _serveTurn() {
     let card = this.deck.pick();
@@ -333,13 +331,13 @@ export default class Game extends EventEmitter {
 
     this.table.players.forEach(player => {
       player.setState(PLAYER_STATES.WAITING);
-      this.socket.emit('player:waiting', {id: player.id});
+      this.socket.emit('player:waiting', { id: player.id });
     });
 
     this.table.dealer = 0;
     let player = this._nextPlayer();
     player.setState(PLAYER_STATES.THINKING);
-    this.socket.emit('player:thinking', {id: player.id});
+    this.socket.emit('player:thinking', { id: player.id });
   }
   _serveRiver() {
     let card = this.deck.pick();
@@ -348,13 +346,13 @@ export default class Game extends EventEmitter {
 
     this.table.players.forEach(player => {
       player.setState(PLAYER_STATES.WAITING);
-      this.socket.emit('player:waiting', {id: player.id});
+      this.socket.emit('player:waiting', { id: player.id });
     });
 
     this.table.currentPlayer = this.table.dealer;
     let player = this._nextPlayer();
     player.setState(PLAYER_STATES.THINKING);
-    this.socket.emit('player:thinking', {id: player.id});
+    this.socket.emit('player:thinking', { id: player.id });
   }
 
   _nextRound() {

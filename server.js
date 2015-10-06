@@ -7,7 +7,7 @@ var
 
 module.exports = {
   http: server,
-  app: app
+  app
 };
 
 // serve static files
@@ -16,7 +16,7 @@ app.use(express.static('dist/'));
 app.set('view engine', 'jade');
 
 // set templates location
-app.set('views', __dirname + '/views/');
+app.set('views', `${__dirname}/views/`);
 
 app.use('/', require('./src/server/routes').router);
 

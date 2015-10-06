@@ -1,7 +1,7 @@
 // TODO remove ugly >>> <<< comments as soon as decorators will behave
 // with jshint, or at least with its ignore:line directive
 
-import {communicator, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
+import { communicator, eventHandler } from 'lib/decorators/socket'; // jshint ignore:line
 
 // >>>
 @communicator
@@ -12,7 +12,7 @@ class Table {
   }
 
   ready() {
-    this.classList.add('hidden');
+    this.classList.add('hidden')
   }
 
   show() {

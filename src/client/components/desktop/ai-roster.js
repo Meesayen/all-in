@@ -1,11 +1,6 @@
-// TODO remove ugly >>> <<< comments as soon as decorators will behave
-// with jshint, or at least with its ignore:line directive
+import { communicator, eventHandler } from 'lib/decorators/socket';
 
-import {communicator, eventHandler} from 'lib/decorators/socket'; // jshint ignore:line
-
-// >>>
 @communicator
-// <<<
 class Roster {
   beforeRegister() {
     this.is = 'ai-roster';
@@ -19,9 +14,7 @@ class Roster {
     this._players = new Map();
   }
 
-  // >>>
   @eventHandler('game:player-joined')
-  // <<<
   _handlePlayerJoined(player) {
     let balloon = document.createElement('ai-player');
     balloon.player = player;
@@ -30,9 +23,7 @@ class Roster {
     this.$.roster.appendChild(balloon);
   }
 
-  // >>>
   @eventHandler('game:player-left')
-  // <<<
   _handlePlayerLeft(player) {
     let balloon = this._players.get(player.id);
     balloon.destroy();
@@ -40,5 +31,4 @@ class Roster {
   }
 }
 
-/* jshint -W064 */
 Polymer(Roster);
