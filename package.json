@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "standard",
+    "test": "standard --verbose | snazzy",
     "serve": "gulp"
   },
   "author": {
@@ -36,6 +36,7 @@
     "gulp-git": "^1.4.0",
     "gulp-livereload": "^3.8.0",
     "gulp-util": "^3.0.6",
+    "snazzy": "^4.0.0",
     "standard": "^7.1.0",
     "vue-hot-reload-api": "^1.3.2",
     "vue-html-loader": "^1.2.2",
