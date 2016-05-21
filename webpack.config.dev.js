@@ -12,7 +12,7 @@ config.entry = {
 
 config.devtool = '#source-map'
 
-config.output.publicPath = 'http://localhost:3000/dist/'
+config.output.publicPath = 'http://localhost:3000/'
 
 config.module.loaders.push({
   test: /\.module\.css$/,

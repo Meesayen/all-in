@@ -1,9 +1,19 @@
 #!/usr/bin/env node
 var server = require('../server')
+var webpack = require('webpack')
+var conf = require('../webpack.config.dev.js')
+var compiler = webpack(conf)
 
-server.app.use(server.express.static('dist/'))
+server.app.use(require('webpack-dev-middleware')(compiler, {
+  publicPath: conf.output.publicPath,
+  stats: {
+    colors: true
+  }
+}))
 
-server.app.get('/', (req, res) => {
+server.app.use(require('webpack-hot-middleware')(compiler))
+
+server.app.get('*', (req, res) => {
   var ua = req.header('user-agent')
   if (/mobile|nexus\s7/i.test(ua)) {
     res.render('mobile', { title: 'All In', message: 'mobile page' })

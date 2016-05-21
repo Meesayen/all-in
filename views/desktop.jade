@@ -1,7 +1,7 @@
 extends layout
 
 block 'head'
-  link(rel='stylesheet', href='/styles/desktop.css')
+  //- link(rel='stylesheet', href='/styles/desktop.css')
 
 block 'content'
   app
@@ -11,4 +11,4 @@ block 'footer'
   div(style='display:none')
     include ../src/client_old/resources/cards.svg
   
-  script(src='dist/host.build.js')
+  script(src='host.build.js')

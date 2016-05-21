@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  <div id="lobby">
+  <div id="lobby" class="ai-lobby">
     <div class="page-box">
       <div class="page">
         <div class="info">

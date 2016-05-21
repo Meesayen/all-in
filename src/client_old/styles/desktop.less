@@ -405,15 +405,15 @@ ai-roster .players {
 
 /* Animate istructions page */
 
-ai-lobby[state="instructions"] .phone-img {
+.ai-lobby[state="instructions"] .phone-img {
   -webkit-animation: phone-slide 400ms ease-out 0ms forwards;
   animation: phone-slide 400ms ease-out 0ms forwards;
 }
-ai-lobby[state="instructions"] .phone-img .url-bar {
+.ai-lobby[state="instructions"] .phone-img .url-bar {
   -webkit-animation: phone-url-bar-down 200ms ease-out 400ms forwards;
   animation: phone-url-bar-down 200ms ease-out 400ms forwards;
 }
-ai-lobby[state="instructions"] .arrow {
+.ai-lobby[state="instructions"] .arrow {
   opacity: 1;
   left: 122px;
   transition:
@@ -422,38 +422,39 @@ ai-lobby[state="instructions"] .arrow {
   -webkit-animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
   animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
 }
-ai-lobby[state="instructions"] .url-box {
+
+.ai-lobby[state="instructions"] .url-box {
   -webkit-animation: fade-in 200ms ease-out 350ms forwards;
   animation: fade-in 200ms ease-out 350ms forwards;
 }
 
 /* Animate token page */
 
-ai-lobby[state="token"] .phone-img {
+.ai-lobby[state="token"] .phone-img {
   -webkit-transform: translateX(-170px);
 }
-ai-lobby[state="token"] .phone-img .url-bar {
+.ai-lobby[state="token"] .phone-img .url-bar {
   -webkit-animation: phone-url-bar-up 150ms ease-out 0ms forwards;
   animation: phone-url-bar-up 150ms ease-out 0ms forwards;
 }
-ai-lobby[state="token"] .phone-img .phone-page {
+.ai-lobby[state="token"] .phone-img .phone-page {
   opacity: 1;
   transition: opacity 300ms ease-out 150ms;
 }
-ai-lobby[state="token"] .phone-img .phone-page .cursor {
+.ai-lobby[state="token"] .phone-img .phone-page .cursor {
   -webkit-animation: fade-in 600ms linear 0ms alternate infinite;
   animation: fade-in 600ms linear 0ms alternate infinite;
 }
-ai-lobby[state="token"] .arrow {
+.ai-lobby[state="token"] .arrow {
   left: 122px;
   opacity: 1;
   -webkit-animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
   animation: arrow-shift 350ms ease-in-out 350ms alternate infinite;
 }
-ai-lobby[state="token"] .url-box {
+.ai-lobby[state="token"] .url-box {
   opacity: 0;
 }
-ai-lobby[state="token"] .token-box {
+.ai-lobby[state="token"] .token-box {
   opacity: 1;
   -webkit-animation: token-box-fade-in 350ms ease-out 0ms forwards;
   animation: token-box-fade-in 350ms ease-out 0ms forwards;
@@ -548,41 +549,6 @@ ai-lobby[state="token"] .token-box {
   background-repeat: no-repeat;
   background-size: 100% 8px;
   background-color: #f2faf6;
-}
-
-.game-area {
-  position: absolute;
-  background: #00994a;
-  background-image: url(../resources/images/noise.png);
-}
-.game-area[data-state="lobby"] {
-  width: 485px;
-  height: 360px;
-  left: 50%;
-  top: 50px;
-  margin-left: -242.5px;
-  border-radius: 15px;
-  box-shadow: inset 0 5px #7ec255;
-}
-.game-area[data-state="table"] {
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  margin-left: 0px;
-  border-radius: 0px;
-  box-shadow: none;
-  transition: width 250ms ease-out,
-    height 250ms ease-out,
-    top 250ms ease-out,
-    left 250ms ease-out,
-    margin-left 250ms ease-out,
-    border-radius 250ms ease-out,
-    box-shadow 250ms ease-out;
-}
-.game-area[data-state="table"] .game-title {
-  margin-top: 50px;
-  transition: margin-top 250ms ease-out;
 }
 
 #lobby {

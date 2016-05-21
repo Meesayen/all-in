@@ -4,7 +4,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "standard --verbose | snazzy",
-    "dev": "node server.js"
+    "build": "webpack ",
+    "serve": "npm run build && node ./bin/www",
+    "dev": "node ./bin/dev"
   },
   "author": {
     "name": "Federico Giovagnoli",
