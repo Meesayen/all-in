@@ -1,11 +1,11 @@
-var scriptsDefs = require('./views/scripts.json');
+var scriptsDefs = require('./views/scripts.json')
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     basePath: 'src/',
     frameworks: ['mocha', 'chai', 'browserify'],
-    files: scriptsDefs.vendorScripts.map(function(item) {
-      return ~item.url.indexOf('//') ? 'http:' + item.url : '../public' + item.url;
+    files: scriptsDefs.vendorScripts.map(function (item) {
+      return ~item.url.indexOf('//') ? 'http:' + item.url : '../public' + item.url
     }).concat([
       '../public/js/templates.js',
       'client/scripts/mock/server.js',
@@ -29,5 +29,5 @@ module.exports = function(config) {
     browsers: ['PhantomJS2'],
     singleRun: true,
     autoWatch: true
-  });
-};
+  })
+}
