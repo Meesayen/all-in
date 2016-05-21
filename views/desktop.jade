@@ -2,17 +2,13 @@ extends layout
 
 block 'head'
   link(rel='stylesheet', href='/styles/desktop.css')
-  link(rel="import", href="/components/desktop/ai-app.html", async)
 
 block 'content'
-  ai-app
-    div.game-area(data-state='lobby')
-      div.game-title
-      ai-lobby
-      ai-roster
-      ai-table
+  app
   div.footer
 
 block 'footer'
   div(style='display:none')
-    include ../src/client/resources/cards.svg
+    include ../src/client_old/resources/cards.svg
+  
+  script(src='dist/host.build.js')

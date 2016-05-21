@@ -1,5 +1,4 @@
 {
-  "stage": 1,
   "ignore": [
     "**/faker.js",
     "**/components/lib/**/*"
