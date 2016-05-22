@@ -53,14 +53,15 @@
 
   import store from '../../vuex/host/store.js'
 
-  var desktopCss = require('../../../client_old/styles/desktop.less')
+  require('../../../client_old/styles/desktop.less')
 
   export default {
     store,
     components: {
-      Lobby,
+      Lobby
       // Roster,
       // Table
     }
   }
+
 </script>
