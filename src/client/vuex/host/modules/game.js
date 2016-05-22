@@ -2,7 +2,21 @@ const state = {
   state: 'lobby',
   id: '',
   isLoading: false,
-  players: [ ]
+  players: [ ],
+  cards: [ ],
+  colors: {
+    red: true,
+    amber: true,
+    green: true,
+    blue: true
+  },
+  seats: {
+    1: 'empty',
+    2: 'empty',
+    3: 'empty',
+    4: 'empty'
+  },
+  pot: 0
 }
 
 const mutations = {
@@ -12,8 +26,12 @@ const mutations = {
 
   'TOKEN_GENERATED' (state, token) {
     state.id = token
-  }
+  },
 
+  'PLAYER_JOINED' (state, player, seat) {
+    state.players.push(player)
+    state.seats[seat] = player.id
+  }
 }
 
 export default {

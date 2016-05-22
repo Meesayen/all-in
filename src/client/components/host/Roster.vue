@@ -17,7 +17,7 @@
 
 <template>
   <div class="ai-roster players">
-    <player v-for="player of players"
+    <player v-for="(id, player) of players"
         :player="player"
     ></player>
   </div>
@@ -32,7 +32,7 @@
     },
     vuex: {
       getters: {
-        players: (state) => state.game.players.filter(p => p.active)
+        players: (state) => state.game.players
       }
     }
   }
