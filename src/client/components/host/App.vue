@@ -37,18 +37,18 @@
 
 <template>
   <div class="app">
-    <div class="game-area" data-state="lobby">
+    <div class="game-area" data-state="{{gameState}}">
       <div class="game-title"></div>
       <lobby></lobby>
-      <!-- <roster></roster>
-      <table></table> -->
+      <roster></roster>
+      <!-- <table></table> -->
     </div>
   </div>
 </template>
 
 <script>
   import Lobby from './Lobby.vue'
-  // import Roster from './Roster.vue'
+  import Roster from './Roster.vue'
   // import Table from './Table.vue'
 
   import store from '../../vuex/host/store.js'
@@ -58,9 +58,14 @@
   export default {
     store,
     components: {
-      Lobby
-      // Roster,
+      Lobby,
+      Roster
       // Table
+    },
+    vuex: {
+      getters: {
+        gameState: (state) => state.game.state
+      }
     }
   }
 
