@@ -17,7 +17,9 @@
     border-radius: 5px;
     box-sizing: border-box;
     -webkit-filter: drop-shadow(0 5px 2px rgba(0, 0, 0, .2));
-    transition: -webkit-filter 200ms ease-in, top 200ms ease-in;
+    transition: -webkit-filter 200ms ease-in, top 200ms ease-in,
+        border 200ms ease-in, top 200ms ease-in,
+        background 200ms ease-in, top 200ms ease-in;
 
     .status {
       position: absolute;
@@ -32,6 +34,7 @@
       font-family: monospace;
       line-height: 27px;
       border-radius: 5px 5px 4px 4px;
+      transition: background 200ms ease-in, top 200ms ease-in;
     }
 
     .cash {
@@ -55,16 +58,19 @@
       }
     }
 
-    &[player-id="player1"] .status {
+    &[player-color="none"] .status {
+      background: grey;
+    }
+    &[player-color="red"] .status {
       background: #f36f62;
     }
-    &[player-id="player2"] .status {
+    &[player-color="amber"] .status {
       background: #fbbe63;
     }
-    &[player-id="player3"] .status {
+    &[player-color="green"] .status {
       background: #7ec255;
     }
-    &[player-id="player4"] .status {
+    &[player-color="blue"] .status {
       background: #40afc3;
     }
     &.thinking {
@@ -92,22 +98,27 @@
     }
   }
 
-  [player-id="player1"] {
+  [player-color="none"] {
+    background: grey;
+    box-shadow: inset 0 4px darkgrey;
+    border: 2px solid darkgrey;
+  }
+  [player-color="red"] {
     background: #F6897E;
     box-shadow: inset 0 4px #BD5B52;
     border: 2px solid #BD5B52;
   }
-  [player-id="player2"] {
+  [player-color="amber"] {
     background: #F7D080;
     box-shadow: inset 0 4px #AF7814;
     border: 2px solid #AF7814;
   }
-  [player-id="player3"] {
+  [player-color="green"] {
     background: #9BD578;
     box-shadow: inset 0 4px #456E2D;
     border: 2px solid #456E2D;
   }
-  [player-id="player4"] {
+  [player-color="blue"] {
     background: #7AC4D1;
     box-shadow: inset 0 4px #227180;
     border: 2px solid #227180;
@@ -146,7 +157,8 @@
     <div id="balloon"
         class="player"
         :class="{ 'float': isCustomizing }"
-        player-id='{{player.id}}'>
+        player-id='{{player.id}}'
+        player-color="{{player.color}}">
       <div class="cash">{{player.cash}}</div>
       <div class="nickname">{{player.nickname}}</div>
       <div class="status">{{player.state}}</div>

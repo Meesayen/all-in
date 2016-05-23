@@ -18,7 +18,8 @@ export const gameSchema = {
     red: true,
     amber: true,
     green: true,
-    blue: true
+    blue: true,
+    none: true
   },
   seats: {
     1: 'empty',
@@ -35,7 +36,15 @@ export const playerSchema = {
   cash: 0,
   bet: 0,
   order: 1,
-  cards: null
+  cards: null,
+  color: 'none',
+  availableColors: {
+    red: true,
+    amber: true,
+    green: true,
+    blue: true,
+    none: true
+  }
 }
 
 export default firebase.database().ref()

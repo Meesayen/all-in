@@ -4,18 +4,6 @@ const state = {
   isLoading: false,
   players: [ ],
   cards: [ ],
-  colors: {
-    red: true,
-    amber: true,
-    green: true,
-    blue: true
-  },
-  seats: {
-    1: 'empty',
-    2: 'empty',
-    3: 'empty',
-    4: 'empty'
-  },
   pot: 0
 }
 
@@ -28,9 +16,12 @@ const mutations = {
     state.id = token
   },
 
-  'PLAYER_JOINED' (state, player, seat) {
+  'PLAYER_JOINED' (state, player) {
     state.players.push(player)
-    state.seats[seat] = player.id
+  },
+
+  'PLAYER_COLOR_UPDATE' (state, id, color) {
+    state.players.find(p => p.id === id).color = color
   }
 }
 
