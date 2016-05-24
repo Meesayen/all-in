@@ -30,7 +30,7 @@ export const gameSchema = {
 }
 
 export const playerSchema = {
-  state: '',
+  state: 'limbo',
   nickname: 'Player',
   active: false,
   cash: 0,

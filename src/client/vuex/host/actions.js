@@ -24,11 +24,15 @@ const seats = {
 
 const initializeListeners = (dispatch, state, token) => {
   db.child(`games/${token}/players`).on('child_added', (data) => {
+    // NOTE: child_added triggered for already processed players...
+    // got to do something to avoid duplicates
     const player = data.val()
     const key = data.key
-    if (!player || state.game.players.length === 4) {
+    if (!player || state.game.players.length === 4 ||
+        state.game.players.find(p => p.id === key)) {
       return
     }
+    console.log(key)
     const freeSeat = Object.keys(seats).filter(k =>
         seats[k] === 'empty')[0]
     player.id = key
@@ -40,30 +44,35 @@ const initializeListeners = (dispatch, state, token) => {
     db.child(`games/${token}/seats/${freeSeat}`).set(player.id)
     db.child(`games/${token}/players/${key}`).update(player).then(() => {
       dispatch('PLAYER_JOINED', player)
-    })
 
-    db.child(`games/${token}/players/${key}/color`).on('value', (data) => {
-      const p = state.game.players.find(p => p.id === key)
-      db.child(`games`).transaction(games => {
-        const colors = games[token].colors
-        if (data.val() !== 'none') {
-          colors[data.val()] = false
-        }
-        if (p.color !== 'none') {
-          colors[p.color] = true
-        }
-        Object.keys(games[token].players).forEach(k => {
-          games[token].players[k].availableColors = colors
+      db.child(`games/${token}/players/${key}/color`).on('value', (data) => {
+        const p = state.game.players.find(p => p.id === key)
+
+        db.child('games').transaction(games => {
+          if (!games) return
+          const colors = games[token].colors
+          if (!colors) {
+            games[token].colors = {}
+            return games
+          }
+          if (data.val() !== 'none') {
+            colors[data.val()] = false
+          }
+          if (p.color !== 'none') {
+            colors[p.color] = true
+          }
+          Object.keys(games[token].players).forEach(k => {
+            games[token].players[k].availableColors = colors
+          })
+          return games
         })
-        return games
+
+        dispatch('PLAYER_COLOR_UPDATE', key, data.val())
       })
 
-      dispatch('PLAYER_COLOR_UPDATE', key, data.val())
-    })
-
-
-    db.child(`games/${token}/players/${key}/nickname`).on('value', (data) => {
-      // console.log(data, data.val())
+      db.child(`games/${token}/players/${key}/nickname`).on('value', (data) => {
+        // console.log(data, data.val())
+      })
     })
 
     const c = ['red', 'green', 'amber', 'blue', 'none']
@@ -84,76 +93,78 @@ const initializeListeners = (dispatch, state, token) => {
       changeColor(token, key, c[getI()])
     }, 4000)
 
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4100)
+    // TODO: see why changing p2 color make p1 flash
 
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4200)
-
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4300)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4320)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4340)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4360)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4320)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4340)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4360)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4320)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4340)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4360)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4320)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4340)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4360)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4320)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()])
-    }, 4340)
-    setTimeout(() => {
-      changeColor(token, key, c[getI()], true)
-    }, 5360)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4100)
+    //
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4200)
+    //
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4300)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4320)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4340)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4360)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4320)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4340)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4360)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4320)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4340)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4360)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4320)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4340)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4360)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4320)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()])
+    // }, 4340)
+    // setTimeout(() => {
+    //   changeColor(token, key, c[getI()], true)
+    // }, 5360)
   })
 
-  setTimeout(() => {
-    db.child(`games/${token}/players`).push().set(playerSchema)
-  }, 1000)
-  setTimeout(() => {
-    db.child(`games/${token}/players`).push().set(playerSchema)
-  }, 1005)
-  setTimeout(() => {
-    db.child(`games/${token}/players`).push().set(playerSchema)
-  }, 1025)
-  setTimeout(() => {
-    db.child(`games/${token}/players`).push().set(playerSchema)
-  }, 1205)
+  // setTimeout(() => {
+  //   db.child(`games/${token}/players`).push().set(playerSchema)
+  // }, 1000)
+  // setTimeout(() => {
+  //   db.child(`games/${token}/players`).push().set(playerSchema)
+  // }, 1005)
+  // setTimeout(() => {
+  //   db.child(`games/${token}/players`).push().set(playerSchema)
+  // }, 1025)
+  // setTimeout(() => {
+  //   db.child(`games/${token}/players`).push().set(playerSchema)
+  // }, 1205)
 }
 
 const changeColor = (token, key, color, takeAvailable) => {
