@@ -48,3 +48,4 @@ export const playerSchema = {
 }
 
 export default firebase.database().ref()
+export const db = firebase.database()

@@ -7,7 +7,7 @@ Vue.use(Vuex)
 // Create an object to hold the initial state when
 // the app starts up
 const state = {
-  state: '',
+  state: 'limbo',
   nickname: 'Player',
   active: false,
   cash: 0,
@@ -26,7 +26,18 @@ const state = {
 
 // Create an object storing various mutations. We will write the mutation
 const mutations = {
-
+  'UPDATE_STATE' (state, val) {
+    state.state = val
+  },
+  'UPDATE_COLOR' (state, val) {
+    state.color = val
+  },
+  'UPDATE_AVAILABLE_COLORS' (state, val) {
+    state.availableColors = val
+  },
+  'UPDATE_NICKNAME' (state, val) {
+    state.nickname = val
+  }
 }
 
 // Combine the initial state and the mutations to create a Vuex store.

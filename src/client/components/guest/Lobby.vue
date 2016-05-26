@@ -17,11 +17,11 @@
     box-shadow: inset 0 -2px #a6ff70;
     line-height: 60px;
     letter-spacing: 2px;
-    margin-left: -125px;
     text-shadow: 0 -1px transparent;
     border: 1px solid white;
     z-index: 1;
     text-transform: uppercase;
+    transform: translateX(-50%);
   }
   ::-webkit-input-placeholder {
     color: white;
@@ -134,7 +134,7 @@
       background-repeat: no-repeat;
     }
 
-    .player-info,
+    // .player-info,
     .waiting-msg {
       display: none;
     }
@@ -175,6 +175,56 @@
     transform: translateY(-150px);
     transition: transform 150ms ease-in, opacity 350ms linear;
   }
+
+  .colors {
+    position: absolute;
+    top: 280px;
+    width: 250px;
+    height: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #7ec255;
+
+    ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-direction: row;
+      justify-content: space-around;
+      margin-top: 15px;
+
+      li {
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(0, 0, 0, .1);
+        border-radius: 3px;
+      }
+    }
+
+    .color.none {
+      background-color: white;
+    }
+    .color.red {
+      background-color: #f36f62;
+    }
+    .color.amber {
+      background-color: #fbbe63;
+    }
+    .color.green {
+      background-color: #7ec255;
+    }
+    .color.blue {
+      background-color: #40afc3;
+    }
+    .color.sel {
+      box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .2)
+    }
+    .color.locked {
+      opacity: .5;
+      pointer-events: none;
+    }
+  }
 </style>
 
 <template>
@@ -194,6 +244,7 @@
           placeholder="token..."
           maxlength="5"
           v-model="token"
+          v-if="isLimbo"
           @keypress.enter="sendToken"/>
       <div class="label">Nickname</div>
       <input class="player-info"
@@ -201,11 +252,29 @@
           placeholder="nickname..."
           maxlength="8"
           @keypress.enter="sendReady"
-          @keyup="updateNickname"
+          @keyup="updateNickname |debounce 500"
+          v-if="isCustomizing"
           :value="nickname"/>
-      <div class="button next" @click="sendToken">SEND</div>
+      <div class="colors" v-show="isCustomizing">
+        Choose a color:
+        <ul @click="updateColor">
+          <li v-for="_color of ['none', 'red', 'amber', 'green', 'blue']"
+              class="color"
+              data-color="{{_color}}"
+              :class="[_color, {
+                'sel': color === _color,
+                'locked': !availableColors[_color]
+              }]"
+          ></li>
+        </ul>
+      </div>
       <div class="button next"
-          v-show="isCostumizing"
+          v-show="isLimbo"
+          @click="sendToken">
+        SEND
+      </div>
+      <div class="button next"
+          v-show="isCustomizing"
           @click="sendReady">
         READY
       </div>
@@ -218,7 +287,7 @@
 
 
 <script>
-  import { joinGameSession } from '../../vuex/guest/actions.js'
+  import { joinGameSession, updateColor, updateNickname } from '../../vuex/guest/actions.js'
 
   export default {
     data: () => ({
@@ -226,10 +295,15 @@
     }),
     methods: {
       sendToken () {
-        joinGameSession(this.token)
+        joinGameSession(this.token.toUpperCase())
+      },
+      updateColor ({ target }) {
+        if (target.dataset.color) {
+          updateColor(target.dataset.color)
+        }
       },
       updateNickname ({ target }) {
-        console.log(a,b)
+        updateNickname(target.value.toUpperCase())
       },
       sendReady (a, b) {
         console.log(a,b)
@@ -237,7 +311,11 @@
     },
     vuex: {
       getters: {
-        isCustomizing: () => {},
+        availableColors: (state) => state.availableColors,
+        color: (state) => state.color,
+        nickname: (state) => state.nickname,
+        isLimbo: (state) => state.state === 'limbo',
+        isCustomizing: (state) => state.state === 'customizing',
         isWrongToken: () => {},
         isFullLobby: () => {},
         playerColor: (state) => state.color

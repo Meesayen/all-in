@@ -22,6 +22,10 @@ const mutations = {
 
   'PLAYER_COLOR_UPDATE' (state, id, color) {
     state.players.find(p => p.id === id).color = color
+  },
+
+  'PLAYER_NICKNAME_UPDATE' (state, id, nickname) {
+    state.players.find(p => p.id === id).nickname = nickname
   }
 }
 
@@ -30,18 +34,6 @@ export default {
   mutations
 }
 
-
-// player
-// {
-//   id: 'player1',
-//   active: true,
-//   nickname: 'Ferdinand',
-//   cash: 10000,
-//   bet: 1000,
-//   state: 'customizing',
-//   color: '',
-//   order: 1,
-// }
 
 // const PLAYER_STATES = {
 //   IDLE: 0,
